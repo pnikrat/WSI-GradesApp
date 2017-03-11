@@ -1,5 +1,6 @@
 package jerseyresources;
 
+import entities.Course;
 import entities.Model;
 
 import javax.ws.rs.GET;
@@ -17,13 +18,11 @@ public class CoursesSingleResource {
     @GET
     @Produces({"application/xml", "application/json"})
     public Response getCourse(@PathParam("courseid") Integer courseId) {
-        if (Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().isPresent()) {
-            return Response.ok().entity(Model.getInstance().getCourses()
-                    .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().get()).build();
-        }
-        else {
+        Course courseFromParam = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        if (courseFromParam != null)
+            return Response.status(200).entity(courseFromParam).build();
+        else
             return Response.status(404).build();
-        }
     }
 }
