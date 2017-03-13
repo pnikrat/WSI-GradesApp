@@ -15,7 +15,7 @@ public class Course {
     private Integer courseId;
     private String courseName;
     private String courseInstructor;
-    private List<Grade> courseGrades = new ArrayList<>();
+    private Grades courseGrades;
 
     public Course() {
 
@@ -39,8 +39,7 @@ public class Course {
         return courseInstructor;
     }
 
-    @XmlElement(name="entities.Grade")
-    public List<Grade> getCourseGrades() {
+    public Grades getCourseGrades() {
         return courseGrades;
     }
 
@@ -52,7 +51,7 @@ public class Course {
         this.courseInstructor = courseInstructor;
     }
 
-    public void setCourseGrades(List<Grade> courseGrades) {
+    public void setCourseGrades(Grades courseGrades) {
         this.courseGrades = courseGrades;
     }
 

@@ -22,8 +22,7 @@ public class GradesSingleResource {
         Course courseFromParam = Model.getInstance().getCourses()
                 .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
         if (courseFromParam != null) {
-            Grade gradeFromParam = courseFromParam.getCourseGrades()
-                    .stream().filter(x -> x.getGradeId().equals(gradeId)).findFirst().orElse(null);
+            Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
             if (gradeFromParam != null)
                 return Response.status(200).entity(gradeFromParam).build();
         }

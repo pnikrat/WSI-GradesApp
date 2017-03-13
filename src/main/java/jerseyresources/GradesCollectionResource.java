@@ -31,10 +31,9 @@ public class GradesCollectionResource {
     public Response createGrade(@PathParam("courseid") Integer courseId, Grade newGrade) {
         //have to check if student exists, if course exists, etc
         Integer id = newGrade.setGradeId();
-        Model.getInstance().getGrades().add(newGrade);
         Course courseWithNewGrade = Model.getInstance().getCourses()
                 .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        courseWithNewGrade.getCourseGrades().add(newGrade);
+        courseWithNewGrade.getCourseGrades().addGrade(newGrade);
         URI createdURI = URI.create("courses/" + courseId.toString() + "/" + "grades/" + id.toString());
         return Response.created(createdURI).build();
     }

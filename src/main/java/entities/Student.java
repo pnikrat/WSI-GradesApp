@@ -2,6 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 public class Student {
     private static Integer indexCounter = 0;
 
+    @XmlElement(name = "index")
     private Integer index;
     private String firstName;
     private String lastName;
