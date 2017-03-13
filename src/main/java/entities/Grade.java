@@ -1,6 +1,7 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
@@ -10,13 +11,14 @@ import java.util.Date;
  */
 @XmlRootElement
 public class Grade {
+    @JsonIgnoreProperties
     public enum GradeValue {
         TWO(2.0), TWOHALF(2.5), THREE(3.0), THREEHALF(3.5), FOUR(4.0), FOURHALF(4.5), FIVE(5.0);
 
-        GradeValue(double value) {
+        GradeValue(Double value) {
             this.value = value;
         }
-        public double value;
+        public Double value;
     };
     private static Integer idCounter = 0;
     private Integer gradeId;
@@ -48,7 +50,7 @@ public class Grade {
         return concreteStudent;
     }
 
-    public double getConcreteGrade() {
+    public Double getConcreteGrade() {
         return concreteGrade.value;
     }
 
@@ -60,7 +62,7 @@ public class Grade {
         this.concreteStudent = concreteStudent;
     }
 
-    public void setConcreteGrade(double value) {
+    public void setConcreteGrade(Double value) {
         this.concreteGrade.value = value;
     }
 
@@ -68,7 +70,8 @@ public class Grade {
         return gradeId;
     }
 
-    public void setGradeId() {
+    public Integer setGradeId() {
         this.gradeId = createUniqueId();
+        return this.gradeId;
     }
 }

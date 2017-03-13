@@ -49,8 +49,9 @@ public class Student {
         return birthDate;
     }
 
-    public void setIndex() {
+    public Integer setIndex() {
         this.index = createUniqueIndex();
+        return this.index;
     }
 
     public void setFirstName(String firstName) {

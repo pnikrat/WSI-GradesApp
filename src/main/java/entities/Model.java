@@ -11,11 +11,8 @@ import java.util.List;
 public class Model {
     private static Model singleton = new Model();
     private List<Course> Courses = new ArrayList<>();
-    //private HashMap<Integer, entities.Course> Courses = new HashMap<>();
     private List<Grade> Grades = new ArrayList<>();
-    //private HashMap<Integer, entities.Grade> Grades = new HashMap<>();
     private List<Student> Students = new ArrayList<>();
-    //private HashMap<Integer, entities.Student> Students = new HashMap<>();
 
     private Model() {
         fillCollections();
@@ -41,9 +38,11 @@ public class Model {
         grdList.add(grd3);
         ArrayList<Grade> grdList2 = new ArrayList<>();
 
-        Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak", grdList);
+        Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
+        crs1.setCourseGrades(grdList);
         Courses.add(crs1);
-        Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki", grdList2);
+        Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
+        crs2.setCourseGrades(grdList2);
         Courses.add(crs2);
     }
 

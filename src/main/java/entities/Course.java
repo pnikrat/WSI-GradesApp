@@ -3,6 +3,7 @@ package entities;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by student on 26.02.2017.
@@ -14,17 +15,16 @@ public class Course {
     private Integer courseId;
     private String courseName;
     private String courseInstructor;
-    private ArrayList<Grade> courseGrades = new ArrayList<>();
+    private List<Grade> courseGrades = new ArrayList<>();
 
     public Course() {
 
     }
 
-    public Course(String courseName, String courseInstructor, ArrayList<Grade> courseGrades) {
+    public Course(String courseName, String courseInstructor) {
         this.courseId = createUniqueId();
         this.courseName = courseName;
         this.courseInstructor = courseInstructor;
-        this.courseGrades = courseGrades;
     }
 
     private static synchronized Integer createUniqueId() {
@@ -40,7 +40,7 @@ public class Course {
     }
 
     @XmlElement(name="entities.Grade")
-    public ArrayList<Grade> getCourseGrades() {
+    public List<Grade> getCourseGrades() {
         return courseGrades;
     }
 
@@ -52,7 +52,7 @@ public class Course {
         this.courseInstructor = courseInstructor;
     }
 
-    public void setCourseGrades(ArrayList<Grade> courseGrades) {
+    public void setCourseGrades(List<Grade> courseGrades) {
         this.courseGrades = courseGrades;
     }
 
@@ -60,7 +60,8 @@ public class Course {
         return courseId;
     }
 
-    public void setCourseId() {
+    public Integer setCourseId() {
         this.courseId = createUniqueId();
+        return this.courseId;
     }
 }
