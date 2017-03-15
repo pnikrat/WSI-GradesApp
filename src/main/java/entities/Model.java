@@ -1,6 +1,9 @@
 package entities;
 
+import utilities.DateUtilities;
+
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,17 +22,20 @@ public class Model {
     }
 
     private void fillCollections() {
-        Student std1 = new Student("Przemyslaw", "Nikratowicz", Date.from(Instant.now()));
+
+        Student std1 = new Student("Przemyslaw", "Nikratowicz",
+                DateUtilities.fromYearMonthDay(1993, 7,23));
         Students.add(std1);
 
-        Student std2 = new Student("Jakub", "Piechocinski", Date.from(Instant.now()));
+        Student std2 = new Student("Jakub", "Piechocinski",
+                DateUtilities.fromYearMonthDay(1995, 11, 28));
         Students.add(std2);
 
-        Grade grd1 = new Grade(GradeValue.FIVE, Date.from(Instant.now()), std1);
+        Grade grd1 = new Grade(GradeValue.FIVE, DateUtilities.fromYearMonthDay(2013, 10, 10), std1);
         fullGradesList.addGrade(grd1);
-        Grade grd2 = new Grade(GradeValue.FOURHALF, Date.from(Instant.now()), std1);
+        Grade grd2 = new Grade(GradeValue.FOURHALF, DateUtilities.fromYearMonthDay(2013, 11, 2), std1);
         fullGradesList.addGrade(grd2);
-        Grade grd3 = new Grade(GradeValue.THREEHALF, Date.from(Instant.now()), std2);
+        Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2);
         fullGradesList.addGrade(grd3);
 
         Grades secondGradesList = new Grades();
