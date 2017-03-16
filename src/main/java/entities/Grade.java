@@ -2,9 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.annotation.*;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -59,6 +57,7 @@ public class Grade {
         this.concreteGrade = value;
     }
 
+    @XmlElement
     public Integer getGradeId() {
         return gradeId;
     }
@@ -66,5 +65,10 @@ public class Grade {
     public Integer setGradeId() {
         this.gradeId = createUniqueId();
         return this.gradeId;
+    }
+
+    @JsonIgnore
+    public void replaceGradeId(Integer gradeId) {
+        this.gradeId = gradeId;
     }
 }

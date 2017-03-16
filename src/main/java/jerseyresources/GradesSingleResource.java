@@ -27,6 +27,24 @@ public class GradesSingleResource {
         return Response.status(404).build();
     }
 
+    @PUT
+    @Consumes({"application/xml", "application/json"})
+    public Response editGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId,
+                              Grade editedGrade) {
+        Course courseFromParam = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        if (courseFromParam != null) {
+            Grade previousGrade = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
+            if (previousGrade != null) {
+                courseFromParam.getCourseGrades().removeGrade(previousGrade);
+                editedGrade.replaceGradeId(gradeId);
+                courseFromParam.getCourseGrades().addGrade(editedGrade);
+                return Response.status(200).build();
+            }
+        }
+        return Response.status(404).build();
+    }
+
     @DELETE
     @Produces({"application/xml", "application/json"})
     public Response deleteGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId) {

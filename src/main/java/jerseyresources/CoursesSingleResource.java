@@ -24,6 +24,21 @@ public class CoursesSingleResource {
             return Response.status(404).build();
     }
 
+    @PUT
+    @Consumes({"application/xml", "application/json"})
+    public Response editCourse(@PathParam("courseid") Integer courseId, Course editedCourse) {
+        Course previousCourse = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        if (previousCourse != null) {
+            Model.getInstance().getCourses().remove(previousCourse);
+            editedCourse.replaceCourseId(courseId);
+            Model.getInstance().getCourses().add(editedCourse);
+            return Response.status(200).build();
+        }
+        else
+            return Response.status(404).build();
+    }
+
     @DELETE
     @Produces({"application/xml", "application/json"})
     public Response deleteCourse(@PathParam("courseid") Integer courseId) {

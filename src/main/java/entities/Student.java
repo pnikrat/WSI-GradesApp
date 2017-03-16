@@ -1,9 +1,11 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -55,6 +57,11 @@ public class Student {
     public Integer setIndex() {
         this.index = createUniqueIndex();
         return this.index;
+    }
+
+    @JsonIgnore
+    public void replaceIndex(Integer index) {
+        this.index = index;
     }
 
     public void setFirstName(String firstName) {

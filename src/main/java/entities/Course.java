@@ -1,6 +1,9 @@
 package entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +15,7 @@ import java.util.List;
 public class Course {
     private static Integer idCounter = 0;
 
+    @XmlElement
     private Integer courseId;
     private String courseName;
     private String courseInstructor;
@@ -39,6 +43,7 @@ public class Course {
         return courseInstructor;
     }
 
+    @XmlElement(name="grades")
     public Grades getCourseGrades() {
         return courseGrades;
     }
@@ -62,5 +67,10 @@ public class Course {
     public Integer setCourseId() {
         this.courseId = createUniqueId();
         return this.courseId;
+    }
+
+    @JsonIgnore
+    public void replaceCourseId(Integer courseId) {
+        this.courseId = courseId;
     }
 }
