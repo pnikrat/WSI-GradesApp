@@ -5,6 +5,7 @@ import entities.Model;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 /**
  * Created by student on 26.02.2017.
@@ -30,7 +31,8 @@ public class CoursesSingleResource {
                 .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
         if (courseFromParam != null) {
             Model.getInstance().getCourses().remove(courseFromParam);
-            return Response.status(200).entity("Course successfully deleted").build();
+            URI coursesContainerURI = URI.create("courses");
+            return Response.status(200).location(coursesContainerURI).build();
         }
         else
             return Response.status(404).build();

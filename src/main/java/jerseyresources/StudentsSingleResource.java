@@ -6,6 +6,7 @@ import entities.Student;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import javax.xml.transform.Result;
+import java.net.URI;
 
 /**
  * Created by student on 26.02.2017.
@@ -31,7 +32,8 @@ public class StudentsSingleResource {
                 .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
         if (studentFromParam != null) {
             Model.getInstance().getStudents().remove(studentFromParam);
-            return Response.status(200).entity("Student successfully deleted").build();
+            URI studentsContainerURI = URI.create("students");
+            return Response.status(200).location(studentsContainerURI).build();
         }
         else
             return Response.status(404).build();

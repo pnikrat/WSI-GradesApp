@@ -6,6 +6,7 @@ import entities.Model;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import java.net.URI;
 
 /**
  * Created by student on 26.02.2017.
@@ -35,7 +36,8 @@ public class GradesSingleResource {
             Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
             if (gradeFromParam != null) {
                 courseFromParam.getCourseGrades().removeGrade(gradeFromParam);
-                return Response.status(200).entity("Grade successfully deleted").build();
+                URI gradesContainerURI = URI.create("courses/" + courseId + "/grades");
+                return Response.status(200).location(gradesContainerURI).build();
             }
         }
         return Response.status(404).build();
