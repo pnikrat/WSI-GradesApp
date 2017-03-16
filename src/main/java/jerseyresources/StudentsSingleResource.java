@@ -3,11 +3,9 @@ package jerseyresources;
 import entities.Model;
 import entities.Student;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.Result;
 
 /**
  * Created by student on 26.02.2017.
@@ -22,6 +20,19 @@ public class StudentsSingleResource {
                 .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
         if (studentFromParam != null)
             return Response.status(200).entity(studentFromParam).build();
+        else
+            return Response.status(404).build();
+    }
+
+    @DELETE
+    @Produces({"application/xml", "application/json"})
+    public Response deleteStudent(@PathParam("studentindex") Integer studentIndex) {
+        Student studentFromParam = Model.getInstance().getStudents()
+                .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
+        if (studentFromParam != null) {
+            Model.getInstance().getStudents().remove(studentFromParam);
+            return Response.status(200).entity("Student successfully deleted").build();
+        }
         else
             return Response.status(404).build();
     }

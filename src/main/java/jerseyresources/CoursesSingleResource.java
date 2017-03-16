@@ -3,10 +3,7 @@ package jerseyresources;
 import entities.Course;
 import entities.Model;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
@@ -22,6 +19,19 @@ public class CoursesSingleResource {
                 .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
         if (courseFromParam != null)
             return Response.status(200).entity(courseFromParam).build();
+        else
+            return Response.status(404).build();
+    }
+
+    @DELETE
+    @Produces({"application/xml", "application/json"})
+    public Response deleteCourse(@PathParam("courseid") Integer courseId) {
+        Course courseFromParam = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        if (courseFromParam != null) {
+            Model.getInstance().getCourses().remove(courseFromParam);
+            return Response.status(200).entity("Course successfully deleted").build();
+        }
         else
             return Response.status(404).build();
     }

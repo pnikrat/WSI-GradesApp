@@ -4,10 +4,7 @@ import entities.Course;
 import entities.Grade;
 import entities.Model;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 
 /**
@@ -25,6 +22,21 @@ public class GradesSingleResource {
             Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
             if (gradeFromParam != null)
                 return Response.status(200).entity(gradeFromParam).build();
+        }
+        return Response.status(404).build();
+    }
+
+    @DELETE
+    @Produces({"application/xml", "application/json"})
+    public Response deleteGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId) {
+        Course courseFromParam = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        if (courseFromParam != null) {
+            Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
+            if (gradeFromParam != null) {
+                courseFromParam.getCourseGrades().removeGrade(gradeFromParam);
+                return Response.status(200).entity("Grade successfully deleted").build();
+            }
         }
         return Response.status(404).build();
     }
