@@ -2,9 +2,12 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Model;
+import javax.ws.rs.container.ResourceContext;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
@@ -13,6 +16,9 @@ import java.util.List;
  */
 @Path("courses")
 public class CoursesCollectionResource {
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     @Produces({"application/xml", "application/json"})
@@ -67,5 +73,12 @@ public class CoursesCollectionResource {
         }
         else
             return Response.status(404).build();
+    }
+
+    @Path("/{courseid}/grades")
+    public GradesCollectionResource getCourseGrades(@PathParam("courseid") Integer courseId) {
+        Course courseFromParam = Model.getInstance().getCourses()
+                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        return new GradesCollectionResource(courseFromParam);
     }
 }

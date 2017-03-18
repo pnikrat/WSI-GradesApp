@@ -12,6 +12,7 @@ import java.util.Date;
 @XmlRootElement
 public class Grade {
     private static Integer idCounter = 0;
+    @XmlElement
     private Integer gradeId;
     private GradeValue concreteGrade;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
@@ -57,7 +58,6 @@ public class Grade {
         this.concreteGrade = value;
     }
 
-    @XmlElement
     public Integer getGradeId() {
         return gradeId;
     }

@@ -12,39 +12,43 @@ import java.util.List;
 /**
  * Created by student on 26.02.2017.
  */
-@Path("courses/{courseid}/grades")
 public class GradesCollectionResource {
+
+    private Integer courseId;
+    private Course parentCourse;
+
+    public GradesCollectionResource(Course parentCourse) {
+        this.parentCourse = parentCourse;
+        this.courseId = parentCourse != null ? parentCourse.getCourseId() : null;
+    }
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Response getGrades(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        if (courseFromParam != null)
-            return Response.status(200).entity(courseFromParam.getCourseGrades()).build();
+    public Response getGrades() {
+        if (parentCourse != null)
+            return Response.status(200).entity(parentCourse.getCourseGrades()).build();
         else
             return Response.status(404).build();
     }
 
     @POST
     @Consumes({"application/xml", "application/json"})
-    public Response createGrade(@PathParam("courseid") Integer courseId, Grade newGrade) {
-        //have to check if student exists, if course exists, etc
-        Integer id = newGrade.setGradeId();
-        Course courseWithNewGrade = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        courseWithNewGrade.getCourseGrades().addGrade(newGrade);
-        URI createdURI = URI.create("courses/" + courseId.toString() + "/" + "grades/" + id.toString());
-        return Response.created(createdURI).build();
+    public Response createGrade(Grade newGrade) {
+        if (parentCourse != null) {
+            Integer id = newGrade.setGradeId();
+            parentCourse.getCourseGrades().addGrade(newGrade);
+            URI createdURI = URI.create("courses/" + courseId.toString() + "/" + "grades/" + id.toString());
+            return Response.created(createdURI).build();
+        }
+        else
+            return Response.status(404).build();
     }
 
     @GET @Path("/{gradeid}")
     @Produces({"application/xml", "application/json"})
-    public Response getGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        if (courseFromParam != null) {
-            Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
+    public Response getGrade(@PathParam("gradeid") Integer gradeId) {
+        if (parentCourse != null) {
+            Grade gradeFromParam = parentCourse.getCourseGrades().getSingleGrade(gradeId);
             if (gradeFromParam != null)
                 return Response.status(200).entity(gradeFromParam).build();
         }
@@ -53,16 +57,13 @@ public class GradesCollectionResource {
 
     @PUT @Path("/{gradeid}")
     @Consumes({"application/xml", "application/json"})
-    public Response editGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId,
-                              Grade editedGrade) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        if (courseFromParam != null) {
-            Grade previousGrade = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
+    public Response editGrade(@PathParam("gradeid") Integer gradeId, Grade editedGrade) {
+        if (parentCourse != null) {
+            Grade previousGrade = parentCourse.getCourseGrades().getSingleGrade(gradeId);
             if (previousGrade != null) {
-                courseFromParam.getCourseGrades().removeGrade(previousGrade);
+                parentCourse.getCourseGrades().removeGrade(previousGrade);
                 editedGrade.replaceGradeId(gradeId);
-                courseFromParam.getCourseGrades().addGrade(editedGrade);
+                parentCourse.getCourseGrades().addGrade(editedGrade);
                 return Response.status(200).build();
             }
         }
@@ -71,13 +72,11 @@ public class GradesCollectionResource {
 
     @DELETE @Path("/{gradeid}")
     @Produces({"application/xml", "application/json"})
-    public Response deleteGrade(@PathParam("courseid") Integer courseId, @PathParam("gradeid") Integer gradeId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
-        if (courseFromParam != null) {
-            Grade gradeFromParam = courseFromParam.getCourseGrades().getSingleGrade(gradeId);
+    public Response deleteGrade(@PathParam("gradeid") Integer gradeId) {
+        if (parentCourse != null) {
+            Grade gradeFromParam = parentCourse.getCourseGrades().getSingleGrade(gradeId);
             if (gradeFromParam != null) {
-                courseFromParam.getCourseGrades().removeGrade(gradeFromParam);
+                parentCourse.getCourseGrades().removeGrade(gradeFromParam);
                 URI gradesContainerURI = URI.create("courses/" + courseId + "/grades");
                 return Response.status(200).location(gradesContainerURI).build();
             }
