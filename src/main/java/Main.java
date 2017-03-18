@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) {
         URI baseUri = UriBuilder.fromUri("http://localhost/").port(9998).build();
         ResourceConfig config = new ResourceConfig(StudentsCollectionResource.class,
-                GradesSingleResource.class,
                 CoursesCollectionResource.class, GradesCollectionResource.class);
 
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
