@@ -13,18 +13,17 @@ import java.util.List;
  */
 @Path("/students")
 public class StudentsCollectionResource {
-
     @GET
     @Produces({"application/xml", "application/json"})
     public List<Student> getStudents() {
-        return Model.getInstance().getStudents();
+        return Model.getInstance().getStudentsContainer().getStudents();
     }
 
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createStudent(Student newStudent) {
         Integer index = newStudent.setIndex();
-        Model.getInstance().getStudents().add(newStudent);
+        Model.getInstance().getStudentsContainer().addStudent(newStudent);
         URI createdURI = URI.create("students/" + index.toString());
         return Response.created(createdURI).build();
     }
@@ -32,8 +31,7 @@ public class StudentsCollectionResource {
     @GET @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response getStudent(@PathParam("studentindex") Integer studentIndex) {
-        Student studentFromParam = Model.getInstance().getStudents()
-                .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
+        Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (studentFromParam != null)
             return Response.status(200).entity(studentFromParam).build();
         else
@@ -43,12 +41,11 @@ public class StudentsCollectionResource {
     @PUT @Path("/{studentindex}")
     @Consumes({"application/xml", "application/json"})
     public Response editStudent(@PathParam("studentindex") Integer studentIndex, Student editedStudent) {
-        Student previousStudent = Model.getInstance().getStudents()
-                .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
+        Student previousStudent = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (previousStudent != null) {
-            Model.getInstance().getStudents().remove(previousStudent);
+            Model.getInstance().getStudentsContainer().removeStudent(previousStudent);
             editedStudent.replaceIndex(studentIndex);
-            Model.getInstance().getStudents().add(editedStudent);
+            Model.getInstance().getStudentsContainer().addStudent(editedStudent);
             return Response.status(200).build();
         }
         else
@@ -58,10 +55,9 @@ public class StudentsCollectionResource {
     @DELETE @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response deleteStudent(@PathParam("studentindex") Integer studentIndex) {
-        Student studentFromParam = Model.getInstance().getStudents()
-                .stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
+        Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (studentFromParam != null) {
-            Model.getInstance().getStudents().remove(studentFromParam);
+            Model.getInstance().getStudentsContainer().removeStudent(studentFromParam);
             URI studentsContainerURI = URI.create("students");
             return Response.status(200).location(studentsContainerURI).build();
         }

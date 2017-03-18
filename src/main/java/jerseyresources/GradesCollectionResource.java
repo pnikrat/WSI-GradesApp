@@ -2,12 +2,10 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Grade;
-import entities.Model;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.net.URI;
-import java.util.List;
 
 /**
  * Created by student on 26.02.2017.
@@ -48,7 +46,7 @@ public class GradesCollectionResource {
     @Produces({"application/xml", "application/json"})
     public Response getGrade(@PathParam("gradeid") Integer gradeId) {
         if (parentCourse != null) {
-            Grade gradeFromParam = parentCourse.getCourseGrades().getSingleGrade(gradeId);
+            Grade gradeFromParam = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (gradeFromParam != null)
                 return Response.status(200).entity(gradeFromParam).build();
         }
@@ -59,7 +57,7 @@ public class GradesCollectionResource {
     @Consumes({"application/xml", "application/json"})
     public Response editGrade(@PathParam("gradeid") Integer gradeId, Grade editedGrade) {
         if (parentCourse != null) {
-            Grade previousGrade = parentCourse.getCourseGrades().getSingleGrade(gradeId);
+            Grade previousGrade = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (previousGrade != null) {
                 parentCourse.getCourseGrades().removeGrade(previousGrade);
                 editedGrade.replaceGradeId(gradeId);
@@ -74,7 +72,7 @@ public class GradesCollectionResource {
     @Produces({"application/xml", "application/json"})
     public Response deleteGrade(@PathParam("gradeid") Integer gradeId) {
         if (parentCourse != null) {
-            Grade gradeFromParam = parentCourse.getCourseGrades().getSingleGrade(gradeId);
+            Grade gradeFromParam = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (gradeFromParam != null) {
                 parentCourse.getCourseGrades().removeGrade(gradeFromParam);
                 URI gradesContainerURI = URI.create("courses/" + courseId + "/grades");

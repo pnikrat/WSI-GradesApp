@@ -1,12 +1,10 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import entitiescontainers.Grades;
 
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by student on 26.02.2017.

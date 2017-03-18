@@ -2,12 +2,9 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Model;
-import javax.ws.rs.container.ResourceContext;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
@@ -16,21 +13,17 @@ import java.util.List;
  */
 @Path("courses")
 public class CoursesCollectionResource {
-
-    @Context
-    UriInfo uriInfo;
-
     @GET
     @Produces({"application/xml", "application/json"})
     public List<Course> getCourses() {
-        return Model.getInstance().getCourses();
+        return Model.getInstance().getCoursesContainer().getCourses();
     }
 
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course newCourse) {
         Integer id = newCourse.setCourseId();
-        Model.getInstance().getCourses().add(newCourse);
+        Model.getInstance().getCoursesContainer().addCourse(newCourse);
         URI createdURI = URI.create("courses/" + id.toString());
         return Response.created(createdURI).build();
     }
@@ -38,8 +31,7 @@ public class CoursesCollectionResource {
     @GET @Path("/{courseid}")
     @Produces({"application/xml", "application/json"})
     public Response getCourse(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
         if (courseFromParam != null)
             return Response.status(200).entity(courseFromParam).build();
         else
@@ -49,12 +41,11 @@ public class CoursesCollectionResource {
     @PUT @Path("/{courseid}")
     @Consumes({"application/xml", "application/json"})
     public Response editCourse(@PathParam("courseid") Integer courseId, Course editedCourse) {
-        Course previousCourse = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        Course previousCourse = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
         if (previousCourse != null) {
-            Model.getInstance().getCourses().remove(previousCourse);
+            Model.getInstance().getCoursesContainer().removeCourse(previousCourse);
             editedCourse.replaceCourseId(courseId);
-            Model.getInstance().getCourses().add(editedCourse);
+            Model.getInstance().getCoursesContainer().addCourse(editedCourse);
             return Response.status(200).build();
         }
         else
@@ -64,10 +55,9 @@ public class CoursesCollectionResource {
     @DELETE @Path("/{courseid}")
     @Produces({"application/xml", "application/json"})
     public Response deleteCourse(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
         if (courseFromParam != null) {
-            Model.getInstance().getCourses().remove(courseFromParam);
+            Model.getInstance().getCoursesContainer().removeCourse(courseFromParam);
             URI coursesContainerURI = URI.create("courses");
             return Response.status(200).location(coursesContainerURI).build();
         }
@@ -77,8 +67,7 @@ public class CoursesCollectionResource {
 
     @Path("/{courseid}/grades")
     public GradesCollectionResource getCourseGrades(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCourses()
-                .stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
         return new GradesCollectionResource(courseFromParam);
     }
 }
