@@ -4,6 +4,7 @@ import entities.Course;
 import entities.Model;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
@@ -17,8 +18,10 @@ public class CoursesCollectionResource {
     @Produces({"application/xml", "application/json"})
     public Response getCourses() {
         List<Course> courses = Model.getInstance().getCoursesContainer().getCourses();
-        if (courses.size() != 0)
-            return Response.status(200).entity(courses).build();
+        if (courses.size() != 0) {
+            GenericEntity<List<Course>> coursesEntity = new GenericEntity<List<Course>>(courses) {};
+            return Response.status(200).entity(coursesEntity).build();
+        }
         else
             return Response.noContent().build();
     }

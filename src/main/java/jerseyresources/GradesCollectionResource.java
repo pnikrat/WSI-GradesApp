@@ -27,7 +27,7 @@ public class GradesCollectionResource {
         if (parentCourse != null) {
             List<Grade> grades = parentCourse.getCourseGrades().getGrades();
             if (grades.size() != 0)
-                return Response.status(200).entity(grades).build();
+                return Response.status(200).entity(parentCourse.getCourseGrades()).build();
             else
                 return Response.noContent().build();
         }
