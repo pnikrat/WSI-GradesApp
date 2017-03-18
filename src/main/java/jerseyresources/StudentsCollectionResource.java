@@ -15,8 +15,12 @@ import java.util.List;
 public class StudentsCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
-    public List<Student> getStudents() {
-        return Model.getInstance().getStudentsContainer().getStudents();
+    public Response getStudents() {
+        List<Student> students = Model.getInstance().getStudentsContainer().getStudents();
+        if (students.size() != 0)
+            return Response.status(200).entity(students).build();
+        else
+            return Response.noContent().build();
     }
 
     @POST

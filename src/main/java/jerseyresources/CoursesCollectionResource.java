@@ -15,8 +15,12 @@ import java.util.List;
 public class CoursesCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
-    public List<Course> getCourses() {
-        return Model.getInstance().getCoursesContainer().getCourses();
+    public Response getCourses() {
+        List<Course> courses = Model.getInstance().getCoursesContainer().getCourses();
+        if (courses.size() != 0)
+            return Response.status(200).entity(courses).build();
+        else
+            return Response.noContent().build();
     }
 
     @POST

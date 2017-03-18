@@ -6,6 +6,7 @@ import entities.Grade;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.List;
 
 /**
  * Created by student on 26.02.2017.
@@ -23,8 +24,13 @@ public class GradesCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
     public Response getGrades() {
-        if (parentCourse != null)
-            return Response.status(200).entity(parentCourse.getCourseGrades()).build();
+        if (parentCourse != null) {
+            List<Grade> grades = parentCourse.getCourseGrades().getGrades();
+            if (grades.size() != 0)
+                return Response.status(200).entity(grades).build();
+            else
+                return Response.noContent().build();
+        }
         else
             return Response.status(404).build();
     }
