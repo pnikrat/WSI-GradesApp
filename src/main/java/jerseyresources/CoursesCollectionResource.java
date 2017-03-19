@@ -2,6 +2,7 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Model;
+import entitiescontainers.Grades;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -30,6 +31,8 @@ public class CoursesCollectionResource {
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course newCourse) {
         Integer id = newCourse.setCourseId();
+        Grades newCourseGrades = new Grades();
+        newCourse.setCourseGrades(newCourseGrades);
         Model.getInstance().getCoursesContainer().addCourse(newCourse);
         URI createdURI = URI.create("courses/" + id.toString());
         return Response.created(createdURI).build();
