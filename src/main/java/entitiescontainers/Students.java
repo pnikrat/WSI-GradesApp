@@ -1,6 +1,7 @@
 package entitiescontainers;
 
 import entities.Student;
+import org.mongodb.morphia.query.Query;
 import server.MorphiaService;
 
 import java.util.ArrayList;
@@ -18,7 +19,8 @@ public class Students {
     }
 
     public List<Student> getStudents() {
-        return students;
+        Query<Student> getAllStudents = MorphiaService.getInstance().getDatastore().createQuery(Student.class);
+        return getAllStudents.asList();
     }
 
     public void setStudents(List<Student> students) {

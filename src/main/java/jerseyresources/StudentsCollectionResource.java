@@ -1,5 +1,6 @@
 package jerseyresources;
 
+import org.mongodb.morphia.query.Query;
 import server.Model;
 import entities.Student;
 import server.MorphiaService;

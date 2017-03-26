@@ -7,6 +7,7 @@ import entities.Student;
 import server.MorphiaService;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
@@ -29,8 +30,10 @@ public class GradesCollectionResource {
     public Response getGrades() {
         if (parentCourse != null) {
             List<Grade> grades = parentCourse.getCourseGrades().getGrades();
-            if (grades.size() != 0)
-                return Response.status(200).entity(parentCourse.getCourseGrades()).build();
+            if (grades.size() != 0) {
+                GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(grades) {};
+                return Response.status(200).entity(gradesEntity).build();
+            }
             else
                 return Response.noContent().build();
         }
