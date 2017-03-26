@@ -2,6 +2,8 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Grade;
+import server.Model;
+import entities.Student;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -39,6 +41,11 @@ public class GradesCollectionResource {
     @Consumes({"application/xml", "application/json"})
     public Response createGrade(Grade newGrade) {
         if (parentCourse != null) {
+            Integer studentsIndex = newGrade.getConcreteStudent().getIndex();
+            Student studentForGrading = Model.getInstance().getStudentsContainer().findSingleStudent(studentsIndex);
+            if (studentForGrading == null)
+                return Response.status(404).build();
+            newGrade.setConcreteStudent(studentForGrading);
             Integer id = newGrade.setGradeId();
             parentCourse.getCourseGrades().addGrade(newGrade);
             URI createdURI = URI.create("courses/" + courseId.toString() + "/" + "grades/" + id.toString());

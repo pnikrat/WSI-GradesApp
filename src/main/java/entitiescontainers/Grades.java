@@ -2,6 +2,7 @@ package entitiescontainers;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import entities.Grade;
+import entities.Student;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
@@ -40,6 +41,14 @@ public class Grades {
 
     public Grade findSingleGrade(Integer gradeId) {
         return grades.stream().filter(x -> x.getGradeId().equals(gradeId)).findFirst().orElse(null);
+    }
+
+    public void removeStudentGrades(Student studentForGradeRemoval) {
+        List<Grade> gradesCopy = new ArrayList<>(grades);
+        for (Grade singleGrade : gradesCopy) {
+            if (singleGrade.getConcreteStudent().equals(studentForGradeRemoval))
+                removeGrade(singleGrade);
+        }
     }
 
 }

@@ -1,6 +1,6 @@
 package jerseyresources;
 
-import entities.Model;
+import server.Model;
 import entities.Student;
 
 import javax.ws.rs.*;
@@ -65,6 +65,7 @@ public class StudentsCollectionResource {
         Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (studentFromParam != null) {
             Model.getInstance().getStudentsContainer().removeStudent(studentFromParam);
+            Model.getInstance().getCoursesContainer().removeStudentGrades(studentFromParam);
             URI studentsContainerURI = URI.create("students");
             return Response.status(200).location(studentsContainerURI).build();
         }

@@ -1,7 +1,7 @@
 package jerseyresources;
 
 import entities.Course;
-import entities.Model;
+import server.Model;
 import entitiescontainers.Grades;
 
 import javax.ws.rs.*;

@@ -1,6 +1,7 @@
 package entitiescontainers;
 
 import entities.Course;
+import entities.Student;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,5 +35,11 @@ public class Courses {
 
     public Course findSingleCourse(Integer courseId) {
         return courses.stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+    }
+
+    public void removeStudentGrades(Student studentForGradeRemoval) {
+        for (Course singleCourse : courses) {
+            singleCourse.getCourseGrades().removeStudentGrades(studentForGradeRemoval);
+        }
     }
 }

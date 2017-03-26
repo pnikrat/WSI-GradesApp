@@ -1,10 +1,17 @@
 package entities;
 
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import entitiescontainers.Courses;
 import entitiescontainers.Grades;
 import entitiescontainers.Students;
+import org.mongodb.morphia.Datastore;
+import org.mongodb.morphia.Morphia;
 import utilities.DateUtilities;
 
+import javax.swing.text.Document;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,12 +23,28 @@ public class Model {
     private static Model singleton = new Model();
     private Students studentsContainer = new Students();
     private Courses coursesContainer = new Courses();
+    private MongoCollection<Document> studentsCollection;
+    private MongoCollection<Document> coursesCollection;
+    private MongoDatabase database;
 
     private Model() {
+        setUpDatabase();
         fillCollections();
     }
 
+    private void setUpDatabase() {
+        MongoClient mongoClient = new MongoClient();
+        Morphia morphia = new Morphia();
+        database = mongoClient.getDatabase("eprotoDB");
+
+        morphia.mapPackage("entities");
+
+        Datastore datastore = morphia.createDatastore(mongoClient, "eprotoDB");
+        datastore.ensureIndexes();
+    }
+
     private void fillCollections() {
+        studentsCollection = database.getCollection("students");
 
         Student std1 = new Student("Przemyslaw", "Nikratowicz",
                 DateUtilities.fromYearMonthDay(1993, 7,23));
