@@ -1,9 +1,13 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.*;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
+import utilities.ObjectIdJaxbAdapter;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.Date;
 
@@ -13,6 +17,10 @@ import java.util.Date;
 @XmlRootElement
 public class Grade {
     private static Integer idCounter = 0;
+
+    @Id
+    @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
+    private ObjectId objectId;
 
     @XmlElement
     private Integer gradeId;
@@ -73,5 +81,14 @@ public class Grade {
     @JsonIgnore
     public void replaceGradeId(Integer gradeId) {
         this.gradeId = gradeId;
+    }
+
+    @XmlTransient
+    public ObjectId getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(ObjectId objectId) {
+        this.objectId = objectId;
     }
 }

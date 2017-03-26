@@ -24,40 +24,41 @@ public class Model {
     private static Model singleton = new Model();
     private Students studentsContainer = new Students();
     private Courses coursesContainer = new Courses();
-    private MorphiaService morphiaService;
 
     private Model() {
         setUpDatabase();
-        //cleanUpDatabaseEntries();
+        cleanUpDatabaseEntries();
         if (!checkIfDatabaseHasEntries())
-            fillCollections();
+            fillCollections(true);
+        else
+            fillCollections(false);
     }
 
     private void cleanUpDatabaseEntries() {
-        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Student.class));
-        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Course.class));
+        MorphiaService.getInstance().getDatastore()
+                .delete(MorphiaService.getInstance().getDatastore().createQuery(Student.class));
+        MorphiaService.getInstance().getDatastore()
+                .delete(MorphiaService.getInstance().getDatastore().createQuery(Course.class));
     }
 
     private void setUpDatabase() {
-        morphiaService = new MorphiaService();
+        MorphiaService.getInstance();
     }
 
     private boolean checkIfDatabaseHasEntries() {
-        long numberOfStudents = morphiaService.getDatastore().getCount(Student.class);
-        long numberOfCourses = morphiaService.getDatastore().getCount(Course.class);
+        long numberOfStudents = MorphiaService.getInstance().getDatastore().getCount(Student.class);
+        long numberOfCourses = MorphiaService.getInstance().getDatastore().getCount(Course.class);
         return !(numberOfStudents == 0 && numberOfCourses == 0);
     }
 
-    private void fillCollections() {
+    private void fillCollections(boolean fillDB) {
         Student std1 = new Student("Przemyslaw", "Nikratowicz",
                 DateUtilities.fromYearMonthDay(1993, 7,23));
         studentsContainer.addStudent(std1);
-        morphiaService.getDatastore().save(std1);
 
         Student std2 = new Student("Jakub", "Piechocinski",
                 DateUtilities.fromYearMonthDay(1995, 11, 28));
         studentsContainer.addStudent(std2);
-        morphiaService.getDatastore().save(std2);
 
         Grades fullGradesList = new Grades();
 
@@ -73,12 +74,17 @@ public class Model {
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
         crs1.setCourseGrades(fullGradesList);
         coursesContainer.addCourse(crs1);
-        morphiaService.getDatastore().save(crs1);
 
         Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
         crs2.setCourseGrades(secondGradesList);
         coursesContainer.addCourse(crs2);
-        morphiaService.getDatastore().save(crs2);
+
+        if (fillDB) {
+            MorphiaService.getInstance().getDatastore().save(std1);
+            MorphiaService.getInstance().getDatastore().save(std2);
+            MorphiaService.getInstance().getDatastore().save(crs1);
+            MorphiaService.getInstance().getDatastore().save(crs2);
+        }
     }
 
     public static Model getInstance() {

@@ -84,6 +84,7 @@ public class Course {
         this.courseId = courseId;
     }
 
+    @XmlTransient
     public ObjectId getObjectId() {
         return objectId;
     }
