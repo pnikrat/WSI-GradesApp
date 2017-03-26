@@ -3,6 +3,7 @@ package jerseyresources;
 import entities.Course;
 import server.Model;
 import entitiescontainers.Grades;
+import server.MorphiaService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -34,6 +35,7 @@ public class CoursesCollectionResource {
         Grades newCourseGrades = new Grades();
         newCourse.setCourseGrades(newCourseGrades);
         Model.getInstance().getCoursesContainer().addCourse(newCourse);
+        MorphiaService.getInstance().getDatastore().save(newCourse);
         URI createdURI = URI.create("courses/" + id.toString());
         return Response.created(createdURI).build();
     }

@@ -2,6 +2,7 @@ package jerseyresources;
 
 import server.Model;
 import entities.Student;
+import server.MorphiaService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -31,6 +32,7 @@ public class StudentsCollectionResource {
     public Response createStudent(Student newStudent) {
         Integer index = newStudent.setIndex();
         Model.getInstance().getStudentsContainer().addStudent(newStudent);
+        MorphiaService.getInstance().getDatastore().save(newStudent);
         URI createdURI = URI.create("students/" + index.toString());
         return Response.created(createdURI).build();
     }
