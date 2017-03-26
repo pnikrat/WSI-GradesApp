@@ -1,6 +1,7 @@
 package entities;
 
 import com.fasterxml.jackson.annotation.*;
+import org.mongodb.morphia.annotations.Reference;
 
 import javax.xml.bind.annotation.*;
 import java.time.LocalDate;
@@ -12,11 +13,13 @@ import java.util.Date;
 @XmlRootElement
 public class Grade {
     private static Integer idCounter = 0;
+
     @XmlElement
     private Integer gradeId;
     private GradeValue concreteGrade;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date dateOfGrade;
+    @Reference
     private Student concreteStudent;
 
     public Grade() {

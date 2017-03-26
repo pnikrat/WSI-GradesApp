@@ -1,9 +1,12 @@
-package entities;
+package server;
 
-import com.mongodb.Mongo;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import entities.Course;
+import entities.Grade;
+import entities.GradeValue;
+import entities.Student;
 import entitiescontainers.Courses;
 import entitiescontainers.Grades;
 import entitiescontainers.Students;
@@ -12,8 +15,6 @@ import org.mongodb.morphia.Morphia;
 import utilities.DateUtilities;
 
 import javax.swing.text.Document;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by student on 26.02.2017.
@@ -23,36 +24,40 @@ public class Model {
     private static Model singleton = new Model();
     private Students studentsContainer = new Students();
     private Courses coursesContainer = new Courses();
-    private MongoCollection<Document> studentsCollection;
-    private MongoCollection<Document> coursesCollection;
-    private MongoDatabase database;
+    private MorphiaService morphiaService;
 
     private Model() {
         setUpDatabase();
-        fillCollections();
+        //cleanUpDatabaseEntries();
+        if (!checkIfDatabaseHasEntries())
+            fillCollections();
+    }
+
+    private void cleanUpDatabaseEntries() {
+        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Student.class));
+        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Course.class));
     }
 
     private void setUpDatabase() {
-        MongoClient mongoClient = new MongoClient();
-        Morphia morphia = new Morphia();
-        database = mongoClient.getDatabase("eprotoDB");
+        morphiaService = new MorphiaService();
+    }
 
-        morphia.mapPackage("entities");
-
-        Datastore datastore = morphia.createDatastore(mongoClient, "eprotoDB");
-        datastore.ensureIndexes();
+    private boolean checkIfDatabaseHasEntries() {
+        long numberOfStudents = morphiaService.getDatastore().getCount(Student.class);
+        long numberOfCourses = morphiaService.getDatastore().getCount(Course.class);
+        return !(numberOfStudents == 0 && numberOfCourses == 0);
     }
 
     private void fillCollections() {
-        studentsCollection = database.getCollection("students");
-
         Student std1 = new Student("Przemyslaw", "Nikratowicz",
                 DateUtilities.fromYearMonthDay(1993, 7,23));
         studentsContainer.addStudent(std1);
+        morphiaService.getDatastore().save(std1);
 
         Student std2 = new Student("Jakub", "Piechocinski",
                 DateUtilities.fromYearMonthDay(1995, 11, 28));
         studentsContainer.addStudent(std2);
+        morphiaService.getDatastore().save(std2);
 
         Grades fullGradesList = new Grades();
 
@@ -68,9 +73,12 @@ public class Model {
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
         crs1.setCourseGrades(fullGradesList);
         coursesContainer.addCourse(crs1);
+        morphiaService.getDatastore().save(crs1);
+
         Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
         crs2.setCourseGrades(secondGradesList);
         coursesContainer.addCourse(crs2);
+        morphiaService.getDatastore().save(crs2);
     }
 
     public static Model getInstance() {

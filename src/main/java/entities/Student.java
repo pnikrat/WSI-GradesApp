@@ -2,19 +2,31 @@ package entities;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.*;
+import utilities.ObjectIdJaxbAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.time.LocalDate;
 import java.util.Date;
 
 /**
  * Created by student on 26.02.2017.
  */
+@Entity("students")
+@Indexes(
+        @Index(value = "index", fields = @Field("index"))
+)
 @XmlRootElement
 public class Student {
     private static Integer indexCounter = 0;
+
+    @Id
+    @XmlTransient
+    private ObjectId objectId;
 
     @XmlElement(name = "index")
     private Integer index;
@@ -74,5 +86,14 @@ public class Student {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    @XmlTransient
+    public ObjectId getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(ObjectId objectId) {
+        this.objectId = objectId;
     }
 }
