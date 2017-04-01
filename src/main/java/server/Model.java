@@ -22,12 +22,15 @@ import javax.swing.text.Document;
 public class Model {
 
     private static Model singleton = new Model();
-    private Students studentsContainer = new Students();
-    private Courses coursesContainer = new Courses();
+    private MorphiaService morphiaService;
+    private Students studentsContainer;
+    private Courses coursesContainer;
+    
 
     private Model() {
         setUpDatabase();
         cleanUpDatabaseEntries();
+        createEntitiesContainers();
         if (!checkIfDatabaseHasEntries())
             fillCollections(true);
         else
@@ -35,20 +38,23 @@ public class Model {
     }
 
     private void cleanUpDatabaseEntries() {
-        MorphiaService.getInstance().getDatastore()
-                .delete(MorphiaService.getInstance().getDatastore().createQuery(Student.class));
-        MorphiaService.getInstance().getDatastore()
-                .delete(MorphiaService.getInstance().getDatastore().createQuery(Course.class));
+        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Student.class));
+        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Course.class));
     }
 
     private void setUpDatabase() {
-        MorphiaService.getInstance();
+        morphiaService = new MorphiaService();
     }
 
     private boolean checkIfDatabaseHasEntries() {
-        long numberOfStudents = MorphiaService.getInstance().getDatastore().getCount(Student.class);
-        long numberOfCourses = MorphiaService.getInstance().getDatastore().getCount(Course.class);
+        long numberOfStudents = morphiaService.getDatastore().getCount(Student.class);
+        long numberOfCourses = morphiaService.getDatastore().getCount(Course.class);
         return !(numberOfStudents == 0 && numberOfCourses == 0);
+    }
+    
+    private void createEntitiesContainers() {
+        studentsContainer = new Students(morphiaService);
+        coursesContainer = new Courses(morphiaService);
     }
 
     private void fillCollections(boolean fillDB) {
@@ -60,19 +66,19 @@ public class Model {
                 DateUtilities.fromYearMonthDay(1995, 11, 28));
         studentsContainer.addStudent(std2);
 
-        Grades fullGradesList = new Grades();
+        Grades firstGradesList = new Grades();
 
         Grade grd1 = new Grade(GradeValue.FIVE, DateUtilities.fromYearMonthDay(2013, 10, 10), std1);
-        fullGradesList.addGrade(grd1);
+        firstGradesList.addGrade(grd1);
         Grade grd2 = new Grade(GradeValue.FOURHALF, DateUtilities.fromYearMonthDay(2013, 11, 2), std1);
-        fullGradesList.addGrade(grd2);
+        firstGradesList.addGrade(grd2);
         Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2);
-        fullGradesList.addGrade(grd3);
+        firstGradesList.addGrade(grd3);
 
         Grades secondGradesList = new Grades();
 
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
-        crs1.setCourseGrades(fullGradesList);
+        crs1.setCourseGrades(firstGradesList);
         coursesContainer.addCourse(crs1);
 
         Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
@@ -80,10 +86,10 @@ public class Model {
         coursesContainer.addCourse(crs2);
 
         if (fillDB) {
-            MorphiaService.getInstance().getDatastore().save(std1);
-            MorphiaService.getInstance().getDatastore().save(std2);
-            MorphiaService.getInstance().getDatastore().save(crs1);
-            MorphiaService.getInstance().getDatastore().save(crs2);
+            morphiaService.getDatastore().save(std1);
+            morphiaService.getDatastore().save(std2);
+            morphiaService.getDatastore().save(crs1);
+            morphiaService.getDatastore().save(crs2);
         }
     }
 

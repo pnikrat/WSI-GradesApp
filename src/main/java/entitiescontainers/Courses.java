@@ -14,13 +14,14 @@ import java.util.List;
 public class Courses {
 
     private List<Course> courses = new ArrayList<>();
-
-    public Courses() {
-
+    private MorphiaService morphiaService;
+    
+    public Courses(MorphiaService morphiaService) {
+        this.morphiaService = morphiaService;
     }
 
     public List<Course> getCourses() {
-        Query<Course> getAllCourses = MorphiaService.getInstance().getDatastore().createQuery(Course.class);
+        Query<Course> getAllCourses = morphiaService.getDatastore().createQuery(Course.class);
         return getAllCourses.asList();
     }
 
@@ -30,6 +31,7 @@ public class Courses {
 
     public void addCourse(Course courseToAdd) {
         courses.add(courseToAdd);
+        morphiaService.getDatastore().save(courseToAdd);
     }
 
     public void removeCourse(Course courseToRemove) {

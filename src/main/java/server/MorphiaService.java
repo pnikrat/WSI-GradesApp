@@ -8,8 +8,6 @@ import org.mongodb.morphia.Morphia;
  * Created by pnikrat on 26.03.17.
  */
 public class MorphiaService {
-
-    private static MorphiaService singleton = new MorphiaService();
     private Morphia morphia;
     private Datastore datastore;
 
@@ -36,6 +34,4 @@ public class MorphiaService {
     public void setDatastore(Datastore datastore) {
         this.datastore = datastore;
     }
-
-    public static MorphiaService getInstance() { return singleton; }
 }

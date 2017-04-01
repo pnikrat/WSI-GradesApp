@@ -36,7 +36,6 @@ public class CoursesCollectionResource {
         Grades newCourseGrades = new Grades();
         newCourse.setCourseGrades(newCourseGrades);
         Model.getInstance().getCoursesContainer().addCourse(newCourse);
-        MorphiaService.getInstance().getDatastore().save(newCourse);
         URI createdURI = URI.create("courses/" + id.toString());
         return Response.created(createdURI).build();
     }

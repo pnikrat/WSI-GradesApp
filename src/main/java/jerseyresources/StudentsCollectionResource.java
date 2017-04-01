@@ -33,7 +33,6 @@ public class StudentsCollectionResource {
     public Response createStudent(Student newStudent) {
         Integer index = newStudent.setIndex();
         Model.getInstance().getStudentsContainer().addStudent(newStudent);
-        MorphiaService.getInstance().getDatastore().save(newStudent);
         URI createdURI = URI.create("students/" + index.toString());
         return Response.created(createdURI).build();
     }
@@ -41,6 +40,7 @@ public class StudentsCollectionResource {
     @GET @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response getStudent(@PathParam("studentindex") Integer studentIndex) {
+        //TODO Find student by Index ID from DB
         Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (studentFromParam != null)
             return Response.status(200).entity(studentFromParam).build();
@@ -53,6 +53,7 @@ public class StudentsCollectionResource {
     public Response editStudent(@PathParam("studentindex") Integer studentIndex, Student editedStudent) {
         Student previousStudent = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
         if (previousStudent != null) {
+            //TODO: remove student from DB
             Model.getInstance().getStudentsContainer().removeStudent(previousStudent);
             editedStudent.replaceIndex(studentIndex);
             Model.getInstance().getStudentsContainer().addStudent(editedStudent);
