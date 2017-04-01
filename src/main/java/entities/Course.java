@@ -3,6 +3,7 @@ package entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import entitiescontainers.Grades;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
@@ -28,6 +29,7 @@ public class Course {
 
     private String courseName;
     private String courseInstructor;
+    @Embedded
     private Grades courseGrades;
 
     public Course() {

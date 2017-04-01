@@ -49,9 +49,9 @@ public class GradesCollectionResource {
             if (studentForGrading == null)
                 return Response.status(404).build();
             newGrade.setConcreteStudent(studentForGrading);
-            Integer id = newGrade.setGradeId();
             parentCourse.getCourseGrades().addGrade(newGrade);
-            URI createdURI = URI.create("courses/" + courseId.toString() + "/" + "grades/" + id.toString());
+            String gradeId = newGrade.getObjectId().toHexString();
+            URI createdURI = URI.create("courses/" + courseId + "/" + "grades/" + gradeId);
             return Response.created(createdURI).build();
         }
         else
@@ -60,7 +60,7 @@ public class GradesCollectionResource {
 
     @GET @Path("/{gradeid}")
     @Produces({"application/xml", "application/json"})
-    public Response getGrade(@PathParam("gradeid") Integer gradeId) {
+    public Response getGrade(@PathParam("gradeid") String gradeId) {
         if (parentCourse != null) {
             Grade gradeFromParam = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (gradeFromParam != null)
@@ -71,7 +71,7 @@ public class GradesCollectionResource {
 
     @PUT @Path("/{gradeid}")
     @Consumes({"application/xml", "application/json"})
-    public Response editGrade(@PathParam("gradeid") Integer gradeId, Grade editedGrade) {
+    public Response editGrade(@PathParam("gradeid") String gradeId, Grade editedGrade) {
         if (parentCourse != null) {
             Grade previousGrade = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (previousGrade != null) {
@@ -86,7 +86,7 @@ public class GradesCollectionResource {
 
     @DELETE @Path("/{gradeid}")
     @Produces({"application/xml", "application/json"})
-    public Response deleteGrade(@PathParam("gradeid") Integer gradeId) {
+    public Response deleteGrade(@PathParam("gradeid") String gradeId) {
         if (parentCourse != null) {
             Grade gradeFromParam = parentCourse.getCourseGrades().findSingleGrade(gradeId);
             if (gradeFromParam != null) {

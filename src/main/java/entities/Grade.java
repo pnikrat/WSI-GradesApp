@@ -16,14 +16,10 @@ import java.util.Date;
  */
 @XmlRootElement
 public class Grade {
-    private static Integer idCounter = 0;
-
     @Id
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
 
-    @XmlElement
-    private Integer gradeId;
     private GradeValue concreteGrade;
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date dateOfGrade;
@@ -35,14 +31,9 @@ public class Grade {
     }
 
     public Grade(GradeValue concreteGrade, Date dateOfGrade, Student concreteStudent) {
-        this.gradeId = createUniqueId();
         this.concreteGrade = concreteGrade;
         this.dateOfGrade = dateOfGrade;
         this.concreteStudent = concreteStudent;
-    }
-
-    private static synchronized Integer createUniqueId() {
-        return idCounter++;
     }
 
     public Date getDateOfGrade() {
@@ -69,18 +60,9 @@ public class Grade {
         this.concreteGrade = value;
     }
 
-    public Integer getGradeId() {
-        return gradeId;
-    }
-
-    public Integer setGradeId() {
-        this.gradeId = createUniqueId();
-        return this.gradeId;
-    }
-
     @JsonIgnore
-    public void replaceGradeId(Integer gradeId) {
-        this.gradeId = gradeId;
+    public void replaceGradeId(String gradeId) {
+        this.objectId = new ObjectId(gradeId);
     }
 
     @XmlTransient

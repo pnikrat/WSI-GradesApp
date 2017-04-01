@@ -3,6 +3,7 @@ package entitiescontainers;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import entities.Grade;
 import entities.Student;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 import server.MorphiaService;
 
@@ -41,8 +42,10 @@ public class Grades {
         grades.remove(gradeToRemove);
     }
 
-    public Grade findSingleGrade(Integer gradeId) {
-        return grades.stream().filter(x -> x.getGradeId().equals(gradeId)).findFirst().orElse(null);
+    public Grade findSingleGrade(String gradeId) {
+        //TODO create single grade by ID DB query here
+        ObjectId convertedGradeId = new ObjectId(gradeId);
+        return grades.stream().filter(x -> x.getObjectId().equals(convertedGradeId)).findFirst().orElse(null);
     }
 
     public void removeStudentGrades(Student studentForGradeRemoval) {
