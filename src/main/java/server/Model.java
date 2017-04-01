@@ -30,8 +30,8 @@ public class Model {
 
     private Model() {
         setUpDatabase();
-        //cleanupEveryDatabaseEntry();
-        cleanUpAllButOriginalDatabaseEntries();
+        cleanupEveryDatabaseEntry();
+        //cleanUpAllButOriginalDatabaseEntries();
         createEntitiesContainers();
         if (!checkIfDatabaseHasEntries())
             fillCollections();

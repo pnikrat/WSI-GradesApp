@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class GradesCollectionResource {
 
-    private Integer courseId;
+    private String courseId;
     private Course parentCourse;
 
     public GradesCollectionResource(Course parentCourse) {
         this.parentCourse = parentCourse;
-        this.courseId = parentCourse != null ? parentCourse.getCourseId() : null;
+        this.courseId = parentCourse != null ? parentCourse.getObjectId().toHexString() : null;
     }
 
     @GET

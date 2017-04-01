@@ -27,14 +27,17 @@ public class Students {
     }
 
     public void removeStudent(Student studentToRemove) {
-        Query<Student> getStudentToDelete = morphiaService.getDatastore()
-                .createQuery(Student.class).field("index").equal(studentToRemove.getIndex());
+        Query<Student> getStudentToDelete = getQueryFindStudentByIndex(studentToRemove.getIndex());
         morphiaService.getDatastore().delete(getStudentToDelete);
     }
 
     public Student findStudentByIndex(Integer studentIndex) {
-        Query<Student> getSingleStudentByIndex = morphiaService.getDatastore()
-                .createQuery(Student.class).field("index").equal(studentIndex);
+        Query<Student> getSingleStudentByIndex = getQueryFindStudentByIndex(studentIndex);
         return getSingleStudentByIndex.get();
+    }
+
+    private Query<Student> getQueryFindStudentByIndex(Integer studentIndex) {
+        return morphiaService.getDatastore()
+                .createQuery(Student.class).field("index").equal(studentIndex);
     }
 }

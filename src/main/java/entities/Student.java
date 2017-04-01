@@ -22,7 +22,7 @@ import java.util.Date;
 )
 @XmlRootElement
 public class Student {
-    private static Integer indexCounter = 2;
+    private static Integer indexCounter = 0;
 
     @Id
     @XmlTransient

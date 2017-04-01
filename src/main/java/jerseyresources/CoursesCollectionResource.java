@@ -31,11 +31,11 @@ public class CoursesCollectionResource {
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course newCourse) {
-        Integer id = newCourse.setCourseId();
         Grades newCourseGrades = new Grades();
         newCourse.setCourseGrades(newCourseGrades);
         Model.getInstance().getCoursesContainer().addCourse(newCourse);
-        URI createdURI = URI.create("courses/" + id.toString());
+        String courseId = newCourse.getObjectId().toHexString();
+        URI createdURI = URI.create("courses/" + courseId);
         return Response.created(createdURI).build();
     }
 

@@ -22,14 +22,10 @@ import java.util.List;
 @Entity("courses")
 @XmlRootElement
 public class Course {
-    private static Integer idCounter = 0;
-
     @Id
     @XmlJavaTypeAdapter(ObjectIdJaxbAdapter.class)
     private ObjectId objectId;
 
-    @XmlElement
-    private Integer courseId;
     private String courseName;
     private String courseInstructor;
     private Grades courseGrades;
@@ -39,13 +35,8 @@ public class Course {
     }
 
     public Course(String courseName, String courseInstructor) {
-        this.courseId = createUniqueId();
         this.courseName = courseName;
         this.courseInstructor = courseInstructor;
-    }
-
-    private static synchronized Integer createUniqueId() {
-        return idCounter++;
     }
 
     public String getCourseName() {
@@ -71,15 +62,6 @@ public class Course {
 
     public void setCourseGrades(Grades courseGrades) {
         this.courseGrades = courseGrades;
-    }
-
-    public Integer getCourseId() {
-        return courseId;
-    }
-
-    public Integer setCourseId() {
-        this.courseId = createUniqueId();
-        return this.courseId;
     }
 
     @JsonIgnore
