@@ -91,10 +91,12 @@ public class Model {
 
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
         crs1.setCourseGrades(firstGradesList);
+        crs1.replaceCourseId("58dfae26a7986c1c71337f30");
         coursesContainer.addCourse(crs1);
 
         Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
         crs2.setCourseGrades(secondGradesList);
+        crs2.replaceCourseId("58dfae26a7986c1c71337f31");
         coursesContainer.addCourse(crs2);
     }
 

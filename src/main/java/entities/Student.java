@@ -76,6 +76,11 @@ public class Student {
         this.index = index;
     }
 
+    @JsonIgnore
+    public void replaceCourseId(String courseId) {
+        this.objectId = new ObjectId(courseId);
+    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }

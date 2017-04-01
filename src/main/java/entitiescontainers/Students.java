@@ -11,8 +11,6 @@ import java.util.List;
  * Created by pnikrat on 18.03.17.
  */
 public class Students {
-
-    private List<Student> students = new ArrayList<>();
     private MorphiaService morphiaService;
     
     public Students(MorphiaService morphiaService) {
@@ -24,23 +22,19 @@ public class Students {
         return getAllStudents.asList();
     }
 
-    public void setStudents(List<Student> students) {
-        this.students = students;
-    }
-
     public void addStudent(Student studentToAdd) {
-        students.add(studentToAdd);
         morphiaService.getDatastore().save(studentToAdd);
     }
 
     public void removeStudent(Student studentToRemove) {
-        students.remove(studentToRemove);
+        Query<Student> getStudentToDelete = morphiaService.getDatastore()
+                .createQuery(Student.class).field("index").equal(studentToRemove.getIndex());
+        morphiaService.getDatastore().delete(getStudentToDelete);
     }
 
     public Student findStudentByIndex(Integer studentIndex) {
         Query<Student> getSingleStudentByIndex = morphiaService.getDatastore()
                 .createQuery(Student.class).field("index").equal(studentIndex);
         return getSingleStudentByIndex.get();
-        //return students.stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
     }
 }

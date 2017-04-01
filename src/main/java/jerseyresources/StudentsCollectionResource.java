@@ -50,9 +50,9 @@ public class StudentsCollectionResource {
     public Response editStudent(@PathParam("studentindex") Integer studentIndex, Student editedStudent) {
         Student previousStudent = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (previousStudent != null) {
-            //TODO: remove student from DB
             Model.getInstance().getStudentsContainer().removeStudent(previousStudent);
             editedStudent.replaceIndex(studentIndex);
+            editedStudent.replaceCourseId(previousStudent.getObjectId().toHexString());
             Model.getInstance().getStudentsContainer().addStudent(editedStudent);
             return Response.status(200).build();
         }
