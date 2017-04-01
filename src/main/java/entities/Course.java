@@ -83,8 +83,8 @@ public class Course {
     }
 
     @JsonIgnore
-    public void replaceCourseId(Integer courseId) {
-        this.courseId = courseId;
+    public void replaceCourseId(String courseId) {
+        this.objectId = new ObjectId(courseId);
     }
 
     @XmlTransient

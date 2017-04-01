@@ -10,6 +10,7 @@ import entities.Student;
 import entitiescontainers.Courses;
 import entitiescontainers.Grades;
 import entitiescontainers.Students;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import utilities.DateUtilities;
@@ -29,17 +30,28 @@ public class Model {
 
     private Model() {
         setUpDatabase();
-        cleanUpDatabaseEntries();
+        //cleanupEveryDatabaseEntry();
+        cleanUpAllButOriginalDatabaseEntries();
         createEntitiesContainers();
         if (!checkIfDatabaseHasEntries())
-            fillCollections(true);
-        else
-            fillCollections(false);
+            fillCollections();
     }
 
-    private void cleanUpDatabaseEntries() {
-        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Student.class));
-        morphiaService.getDatastore().delete(morphiaService.getDatastore().createQuery(Course.class));
+    private void cleanupEveryDatabaseEntry() {
+        morphiaService.getDatastore().delete(morphiaService.getDatastore()
+                .createQuery(Student.class));
+        morphiaService.getDatastore().delete(morphiaService.getDatastore()
+                .createQuery(Course.class));
+    }
+
+    private void cleanUpAllButOriginalDatabaseEntries() {
+        morphiaService.getDatastore().delete(morphiaService.getDatastore()
+                .createQuery(Student.class).field("index").greaterThan(1));
+        ObjectId firstCourseObjectId = new ObjectId("58dfae26a7986c1c71337f30");
+        ObjectId secondCourseObjectId = new ObjectId("58dfae26a7986c1c71337f31");
+        morphiaService.getDatastore().delete(morphiaService.getDatastore()
+                .createQuery(Course.class).field("_id").notEqual(firstCourseObjectId)
+                .field("_id").notEqual(secondCourseObjectId));
     }
 
     private void setUpDatabase() {
@@ -49,15 +61,15 @@ public class Model {
     private boolean checkIfDatabaseHasEntries() {
         long numberOfStudents = morphiaService.getDatastore().getCount(Student.class);
         long numberOfCourses = morphiaService.getDatastore().getCount(Course.class);
-        return !(numberOfStudents == 0 && numberOfCourses == 0);
+        return (numberOfStudents != 0 || numberOfCourses != 0);
     }
-    
+
     private void createEntitiesContainers() {
         studentsContainer = new Students(morphiaService);
         coursesContainer = new Courses(morphiaService);
     }
 
-    private void fillCollections(boolean fillDB) {
+    private void fillCollections() {
         Student std1 = new Student("Przemyslaw", "Nikratowicz",
                 DateUtilities.fromYearMonthDay(1993, 7,23));
         studentsContainer.addStudent(std1);
@@ -84,13 +96,6 @@ public class Model {
         Course crs2 = new Course("Multimedialne interfejsy uzytkownika", "dr inz Bartlomiej Predki");
         crs2.setCourseGrades(secondGradesList);
         coursesContainer.addCourse(crs2);
-
-        if (fillDB) {
-            morphiaService.getDatastore().save(std1);
-            morphiaService.getDatastore().save(std2);
-            morphiaService.getDatastore().save(crs1);
-            morphiaService.getDatastore().save(crs2);
-        }
     }
 
     public static Model getInstance() {
