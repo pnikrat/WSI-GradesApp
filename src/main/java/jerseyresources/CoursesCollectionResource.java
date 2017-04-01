@@ -1,10 +1,9 @@
 package jerseyresources;
 
 import entities.Course;
-import org.mongodb.morphia.query.Query;
+import org.bson.types.ObjectId;
 import server.Model;
 import entitiescontainers.Grades;
-import server.MorphiaService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -42,8 +41,8 @@ public class CoursesCollectionResource {
 
     @GET @Path("/{courseid}")
     @Produces({"application/xml", "application/json"})
-    public Response getCourse(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
+    public Response getCourse(@PathParam("courseid") String courseId) {
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findCourseById(courseId);
         if (courseFromParam != null)
             return Response.status(200).entity(courseFromParam).build();
         else
@@ -52,8 +51,8 @@ public class CoursesCollectionResource {
 
     @PUT @Path("/{courseid}")
     @Consumes({"application/xml", "application/json"})
-    public Response editCourse(@PathParam("courseid") Integer courseId, Course editedCourse) {
-        Course previousCourse = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
+    public Response editCourse(@PathParam("courseid") String courseId, Course editedCourse) {
+        Course previousCourse = Model.getInstance().getCoursesContainer().findCourseById(courseId);
         if (previousCourse != null) {
             Model.getInstance().getCoursesContainer().removeCourse(previousCourse);
             editedCourse.replaceCourseId(courseId);
@@ -66,8 +65,8 @@ public class CoursesCollectionResource {
 
     @DELETE @Path("/{courseid}")
     @Produces({"application/xml", "application/json"})
-    public Response deleteCourse(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
+    public Response deleteCourse(@PathParam("courseid") String courseId) {
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findCourseById(courseId);
         if (courseFromParam != null) {
             Model.getInstance().getCoursesContainer().removeCourse(courseFromParam);
             URI coursesContainerURI = URI.create("courses");
@@ -78,8 +77,8 @@ public class CoursesCollectionResource {
     }
 
     @Path("/{courseid}/grades")
-    public GradesCollectionResource getCourseGrades(@PathParam("courseid") Integer courseId) {
-        Course courseFromParam = Model.getInstance().getCoursesContainer().findSingleCourse(courseId);
+    public GradesCollectionResource getCourseGrades(@PathParam("courseid") String courseId) {
+        Course courseFromParam = Model.getInstance().getCoursesContainer().findCourseById(courseId);
         return new GradesCollectionResource(courseFromParam);
     }
 }

@@ -1,9 +1,7 @@
 package jerseyresources;
 
-import org.mongodb.morphia.query.Query;
 import server.Model;
 import entities.Student;
-import server.MorphiaService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
@@ -40,8 +38,7 @@ public class StudentsCollectionResource {
     @GET @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response getStudent(@PathParam("studentindex") Integer studentIndex) {
-        //TODO Find student by Index ID from DB
-        Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
+        Student studentFromParam = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (studentFromParam != null)
             return Response.status(200).entity(studentFromParam).build();
         else
@@ -51,7 +48,7 @@ public class StudentsCollectionResource {
     @PUT @Path("/{studentindex}")
     @Consumes({"application/xml", "application/json"})
     public Response editStudent(@PathParam("studentindex") Integer studentIndex, Student editedStudent) {
-        Student previousStudent = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
+        Student previousStudent = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (previousStudent != null) {
             //TODO: remove student from DB
             Model.getInstance().getStudentsContainer().removeStudent(previousStudent);
@@ -66,7 +63,7 @@ public class StudentsCollectionResource {
     @DELETE @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response deleteStudent(@PathParam("studentindex") Integer studentIndex) {
-        Student studentFromParam = Model.getInstance().getStudentsContainer().findSingleStudent(studentIndex);
+        Student studentFromParam = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (studentFromParam != null) {
             Model.getInstance().getStudentsContainer().removeStudent(studentFromParam);
             Model.getInstance().getCoursesContainer().removeStudentGrades(studentFromParam);

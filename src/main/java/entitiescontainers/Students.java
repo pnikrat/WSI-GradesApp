@@ -37,7 +37,10 @@ public class Students {
         students.remove(studentToRemove);
     }
 
-    public Student findSingleStudent(Integer studentIndex) {
-        return students.stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
+    public Student findStudentByIndex(Integer studentIndex) {
+        Query<Student> getSingleStudentByIndex = morphiaService.getDatastore()
+                .createQuery(Student.class).field("index").equal(studentIndex);
+        return getSingleStudentByIndex.get();
+        //return students.stream().filter(x -> x.getIndex().equals(studentIndex)).findFirst().orElse(null);
     }
 }

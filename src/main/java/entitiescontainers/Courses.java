@@ -2,6 +2,7 @@ package entitiescontainers;
 
 import entities.Course;
 import entities.Student;
+import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
 import server.MorphiaService;
 
@@ -38,8 +39,11 @@ public class Courses {
         courses.remove(courseToRemove);
     }
 
-    public Course findSingleCourse(Integer courseId) {
-        return courses.stream().filter(x -> x.getCourseId().equals(courseId)).findFirst().orElse(null);
+    public Course findCourseById(String courseId) {
+        ObjectId convertedCourseId = new ObjectId(courseId);
+        Query<Course> getSingleCourseById = morphiaService.getDatastore()
+                .createQuery(Course.class).field("_id").equal(convertedCourseId);
+        return getSingleCourseById.get();
     }
 
     public void removeStudentGrades(Student studentForGradeRemoval) {
