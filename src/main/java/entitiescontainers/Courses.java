@@ -27,7 +27,11 @@ public class Courses {
     public void addCourse(Course courseToAdd) {
         morphiaService.getDatastore().save(courseToAdd);
     }
-    
+
+    public void addGrade(Course courseWithAddedGrade) {
+        morphiaService.getDatastore().save(courseWithAddedGrade);
+    }
+
     public void removeCourse(Course courseToRemove) {
         Query<Course> getCourseToDelete =getQueryFindCourseById(courseToRemove.getObjectId());
         morphiaService.getDatastore().delete(getCourseToDelete);

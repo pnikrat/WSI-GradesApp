@@ -87,6 +87,8 @@ public class Model {
         Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2);
         firstGradesList.addGrade(grd3);
 
+        firstGradesList.setGradesObjectIdField();
+
         Grades secondGradesList = new Grades();
 
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");

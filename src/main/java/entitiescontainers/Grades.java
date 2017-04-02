@@ -16,13 +16,10 @@ import java.util.List;
 /**
  * Created by pnikrat on 13.03.17.
  */
-@XmlRootElement(name="grades")
 public class Grades {
-
     private List<Grade> grades = new ArrayList<>();
 
     public Grades() {
-
     }
 
     @XmlElement(name="grade")
@@ -40,6 +37,12 @@ public class Grades {
 
     public void removeGrade(Grade gradeToRemove) {
         grades.remove(gradeToRemove);
+    }
+
+    public void setGradesObjectIdField() {
+        for (Grade g : grades) {
+            g.setObjectId(new ObjectId());
+        }
     }
 
     public Grade findSingleGrade(String gradeId) {

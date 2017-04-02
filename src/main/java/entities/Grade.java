@@ -2,6 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.annotation.*;
 import org.bson.types.ObjectId;
+import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Id;
 import org.mongodb.morphia.annotations.Reference;
 import utilities.ObjectIdJaxbAdapter;
@@ -14,6 +15,7 @@ import java.util.Date;
 /**
  * Created by student on 26.02.2017.
  */
+@Embedded
 @XmlRootElement
 public class Grade {
     @Id

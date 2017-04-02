@@ -2,6 +2,7 @@ package jerseyresources;
 
 import entities.Course;
 import entities.Grade;
+import org.bson.types.ObjectId;
 import server.Model;
 import entities.Student;
 
@@ -49,7 +50,9 @@ public class GradesCollectionResource {
             if (studentForGrading == null)
                 return Response.status(404).build();
             newGrade.setConcreteStudent(studentForGrading);
+            newGrade.setObjectId(new ObjectId());
             parentCourse.getCourseGrades().addGrade(newGrade);
+            Model.getInstance().getCoursesContainer().addGrade(parentCourse);
             String gradeId = newGrade.getObjectId().toHexString();
             URI createdURI = URI.create("courses/" + courseId + "/" + "grades/" + gradeId);
             return Response.created(createdURI).build();
