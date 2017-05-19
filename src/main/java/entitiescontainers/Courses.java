@@ -1,6 +1,7 @@
 package entitiescontainers;
 
 import entities.Course;
+import entities.Grade;
 import entities.Student;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
@@ -28,7 +29,7 @@ public class Courses {
         morphiaService.getDatastore().save(courseToAdd);
     }
 
-    public void addGrade(Course courseWithAddedGrade) {
+    public void commitCourseWithGradesChanges(Course courseWithAddedGrade) {
         morphiaService.getDatastore().save(courseWithAddedGrade);
     }
 
@@ -42,10 +43,29 @@ public class Courses {
         return getSingleCourseById.get();
     }
 
-    public void removeStudentGrades(Student studentForGradeRemoval) {
-        List<Course> courses = getCourses();
-        for (Course singleCourse : courses) {
-            singleCourse.getCourseGrades().removeStudentGrades(studentForGradeRemoval);
+    //Under construction
+//    public void removeStudentGrades(Student studentForGradeRemoval) {
+//        List<Course> courses = getCourses();
+//        for (Course singleCourse : courses) {
+//            singleCourse.getCourseGrades().removeStudentGrades(studentForGradeRemoval);
+//        }
+//    }
+
+//    public void removeStudentGrades(Student studentForGradeRemoval) {
+//        List<Grade> gradesCopy = new ArrayList<>(grades);
+//        for (Grade singleGrade : gradesCopy) {
+//            if (singleGrade.getConcreteStudent().equals(studentForGradeRemoval))
+//                removeGrade(singleGrade);
+//        }
+//    }
+
+    public List<Grade> getCourseGrades(Course courseWithGradesToGet) {
+        return courseWithGradesToGet.getCourseGrades();
+    }
+
+    public void setGradesObjectIdField(List<Grade> grades) {
+        for (Grade g : grades) {
+            g.setObjectId(new ObjectId());
         }
     }
 

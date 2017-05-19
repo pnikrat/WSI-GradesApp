@@ -1,14 +1,14 @@
 package jerseyresources;
 
 import entities.Course;
-import org.bson.types.ObjectId;
+import entities.Grade;
 import server.Model;
-import entitiescontainers.Grades;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public class CoursesCollectionResource {
     @POST
     @Consumes({"application/xml", "application/json"})
     public Response createCourse(Course newCourse) {
-        Grades newCourseGrades = new Grades();
+        List<Grade> newCourseGrades = new ArrayList<>();
         newCourse.setCourseGrades(newCourseGrades);
         Model.getInstance().getCoursesContainer().addCourse(newCourse);
         String courseId = newCourse.getObjectId().toHexString();

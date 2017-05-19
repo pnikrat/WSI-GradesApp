@@ -1,21 +1,16 @@
 package server;
 
-import com.mongodb.MongoClient;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
 import entities.Course;
 import entities.Grade;
 import entities.GradeValue;
 import entities.Student;
 import entitiescontainers.Courses;
-import entitiescontainers.Grades;
 import entitiescontainers.Students;
 import org.bson.types.ObjectId;
-import org.mongodb.morphia.Datastore;
-import org.mongodb.morphia.Morphia;
 import utilities.DateUtilities;
 
-import javax.swing.text.Document;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by student on 26.02.2017.
@@ -78,18 +73,18 @@ public class Model {
                 DateUtilities.fromYearMonthDay(1995, 11, 28));
         studentsContainer.addStudent(std2);
 
-        Grades firstGradesList = new Grades();
+        List<Grade> firstGradesList = new ArrayList<>();
 
         Grade grd1 = new Grade(GradeValue.FIVE, DateUtilities.fromYearMonthDay(2013, 10, 10), std1);
-        firstGradesList.addGrade(grd1);
+        firstGradesList.add(grd1);
         Grade grd2 = new Grade(GradeValue.FOURHALF, DateUtilities.fromYearMonthDay(2013, 11, 2), std1);
-        firstGradesList.addGrade(grd2);
+        firstGradesList.add(grd2);
         Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2);
-        firstGradesList.addGrade(grd3);
+        firstGradesList.add(grd3);
 
-        firstGradesList.setGradesObjectIdField();
+        coursesContainer.setGradesObjectIdField(firstGradesList);
 
-        Grades secondGradesList = new Grades();
+        List<Grade> secondGradesList = new ArrayList<>();
 
         Course crs1 = new Course("Wytwarzanie systemow internetowych", "dr inz. Tomasz Pawlak");
         crs1.setCourseGrades(firstGradesList);
