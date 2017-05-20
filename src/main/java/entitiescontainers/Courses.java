@@ -24,13 +24,13 @@ public class Courses {
         Query<Course> getAllCourses = morphiaService.getDatastore().createQuery(Course.class);
         return getAllCourses.asList();
     }
-    
+
     public void addCourse(Course courseToAdd) {
         morphiaService.getDatastore().save(courseToAdd);
     }
 
-    public void commitCourseWithGradesChanges(Course courseWithAddedGrade) {
-        morphiaService.getDatastore().save(courseWithAddedGrade);
+    public void commitCourseWithGradesChanges(Course courseWithGradeChange) {
+        morphiaService.getDatastore().save(courseWithGradeChange);
     }
 
     public void removeCourse(Course courseToRemove) {
@@ -43,21 +43,13 @@ public class Courses {
         return getSingleCourseById.get();
     }
 
-    //Under construction
-//    public void removeStudentGrades(Student studentForGradeRemoval) {
-//        List<Course> courses = getCourses();
-//        for (Course singleCourse : courses) {
-//            singleCourse.getCourseGrades().removeStudentGrades(studentForGradeRemoval);
-//        }
-//    }
-
-//    public void removeStudentGrades(Student studentForGradeRemoval) {
-//        List<Grade> gradesCopy = new ArrayList<>(grades);
-//        for (Grade singleGrade : gradesCopy) {
-//            if (singleGrade.getConcreteStudent().equals(studentForGradeRemoval))
-//                removeGrade(singleGrade);
-//        }
-//    }
+    public void removeStudentGrades(Student studentForGradeRemoval) {
+        List<Course> courses = getCourses();
+        for (Course singleCourse : courses) {
+            singleCourse.removeStudentGrades(studentForGradeRemoval);
+            commitCourseWithGradesChanges(singleCourse);
+        }
+    }
 
     public List<Grade> getCourseGrades(Course courseWithGradesToGet) {
         return courseWithGradesToGet.getCourseGrades();

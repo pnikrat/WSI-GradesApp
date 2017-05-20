@@ -65,9 +65,8 @@ public class StudentsCollectionResource {
     public Response deleteStudent(@PathParam("studentindex") Integer studentIndex) {
         Student studentFromParam = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (studentFromParam != null) {
+            Model.getInstance().getCoursesContainer().removeStudentGrades(studentFromParam);
             Model.getInstance().getStudentsContainer().removeStudent(studentFromParam);
-            //TODO:Uncomment once grades are sorted out
-            //Model.getInstance().getCoursesContainer().removeStudentGrades(studentFromParam);
             URI studentsContainerURI = URI.create("students");
             return Response.status(200).location(studentsContainerURI).build();
         }
