@@ -1,12 +1,15 @@
 package jerseyresources;
 
+import com.sun.javafx.sg.prism.NGShape;
 import entities.Course;
 import entities.Grade;
 import server.Model;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +21,12 @@ import java.util.List;
 public class CoursesCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
-    public Response getCourses() {
-        List<Course> courses = Model.getInstance().getCoursesContainer().getCourses();
+    public Response getCourses(@QueryParam("courseInstructor") String specificInstructorParam) {
+        List<Course> courses;
+        if (specificInstructorParam == null)
+            courses = Model.getInstance().getCoursesContainer().getCourses();
+        else
+            courses = Model.getInstance().getCoursesContainer().getCoursesByInstructor(specificInstructorParam);
         if (courses.size() != 0) {
             GenericEntity<List<Course>> coursesEntity = new GenericEntity<List<Course>>(courses) {};
             return Response.status(200).entity(coursesEntity).build();

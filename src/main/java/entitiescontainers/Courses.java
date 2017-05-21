@@ -25,6 +25,11 @@ public class Courses {
         return getAllCourses.asList();
     }
 
+    public List<Course> getCoursesByInstructor(String specificInstructorParam) {
+        return morphiaService.getDatastore().createQuery(Course.class).field("courseInstructor")
+                .equal(specificInstructorParam).asList();
+    }
+
     public void addCourse(Course courseToAdd) {
         morphiaService.getDatastore().save(courseToAdd);
     }

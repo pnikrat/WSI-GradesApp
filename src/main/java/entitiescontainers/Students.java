@@ -24,7 +24,7 @@ public class Students {
         return getAllStudents.asList();
     }
 
-    public List<Student> getSpecificStudents(MultivaluedMap<String, String> queryParams) {
+    public List<Student> getStudentsByNames(MultivaluedMap<String, String> queryParams) {
         String firstNameParam = queryParams.getFirst("firstName");
         String lastNameParam = queryParams.getFirst("lastName");
         List<Student> specificStudents = new ArrayList<>();

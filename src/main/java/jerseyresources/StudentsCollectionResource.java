@@ -6,7 +6,6 @@ import entities.Student;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,11 +17,11 @@ public class StudentsCollectionResource {
     @Produces({"application/xml", "application/json"})
     public Response getStudents(@Context UriInfo uriInfo) {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-        List<Student> students = new ArrayList<>();
+        List<Student> students;
         if (queryParams.isEmpty())
             students = Model.getInstance().getStudentsContainer().getStudents();
         else
-            students = Model.getInstance().getStudentsContainer().getSpecificStudents(queryParams);
+            students = Model.getInstance().getStudentsContainer().getStudentsByNames(queryParams);
         if (students.size() != 0) {
             GenericEntity<List<Student>> studentsEntity = new GenericEntity<List<Student>>(students) {};
             return Response.status(200).entity(studentsEntity).build();
