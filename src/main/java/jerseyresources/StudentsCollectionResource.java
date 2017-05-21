@@ -4,9 +4,9 @@ import server.Model;
 import entities.Student;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,8 +16,13 @@ import java.util.List;
 public class StudentsCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
-    public Response getStudents() {
-        List<Student> students = Model.getInstance().getStudentsContainer().getStudents();
+    public Response getStudents(@Context UriInfo uriInfo) {
+        MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+        List<Student> students = new ArrayList<>();
+        if (queryParams.isEmpty())
+            students = Model.getInstance().getStudentsContainer().getStudents();
+        else
+            students = Model.getInstance().getStudentsContainer().getSpecificStudents(queryParams);
         if (students.size() != 0) {
             GenericEntity<List<Student>> studentsEntity = new GenericEntity<List<Student>>(students) {};
             return Response.status(200).entity(studentsEntity).build();
