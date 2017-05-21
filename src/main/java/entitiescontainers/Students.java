@@ -3,9 +3,12 @@ package entitiescontainers;
 import entities.Student;
 import org.mongodb.morphia.query.Query;
 import server.MorphiaService;
+import utilities.DateUtilities;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -40,6 +43,40 @@ public class Students {
             else
                 specificStudents = morphiaService.getDatastore().createQuery(Student.class).field("firstName")
                         .equal(firstNameParam).field("lastName").equal(lastNameParam).asList();
+        }
+        return specificStudents;
+    }
+
+    public List<Student> getStudentsByBirthdays(MultivaluedMap<String, String> queryParams, Date birthDateParam) {
+        String comparator = queryParams.getFirst("comparator");
+        List<Student> specificStudents = new ArrayList<>();
+        if (birthDateParam == null || comparator == null)
+            return specificStudents;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(birthDateParam);
+        switch (comparator) {
+            case "eq":
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                Date dayBeginning = calendar.getTime();
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                Date dayEnding = calendar.getTime();
+                Query<Student> query = morphiaService.getDatastore().find(Student.class);
+                query.and(query.criteria("birthDate").lessThan(dayEnding),
+                          query.criteria("birthDate").greaterThan(dayBeginning));
+                specificStudents = query.asList();
+                break;
+            case "lt":
+                calendar.set(Calendar.HOUR_OF_DAY, 23);
+                Date upToDate = calendar.getTime();
+                specificStudents = morphiaService.getDatastore().createQuery(Student.class).field("birthDate")
+                        .lessThan(upToDate).asList();
+                break;
+            case "gt":
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                Date fromDate = calendar.getTime();
+                specificStudents = morphiaService.getDatastore().createQuery(Student.class).field("birthDate")
+                        .greaterThan(fromDate).asList();
+                break;
         }
         return specificStudents;
     }

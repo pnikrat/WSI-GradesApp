@@ -6,6 +6,7 @@ import entities.Student;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,13 +16,15 @@ import java.util.List;
 public class StudentsCollectionResource {
     @GET
     @Produces({"application/xml", "application/json"})
-    public Response getStudents(@Context UriInfo uriInfo) {
+    public Response getStudents(@Context UriInfo uriInfo, @QueryParam("birthDate") Date birthDateParam) {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
         List<Student> students;
         if (queryParams.isEmpty())
             students = Model.getInstance().getStudentsContainer().getStudents();
-        else
+        else if (queryParams.containsKey("firstName") || queryParams.containsKey("lastName"))
             students = Model.getInstance().getStudentsContainer().getStudentsByNames(queryParams);
+        else
+            students = Model.getInstance().getStudentsContainer().getStudentsByBirthdays(queryParams, birthDateParam);
         if (students.size() != 0) {
             GenericEntity<List<Student>> studentsEntity = new GenericEntity<List<Student>>(students) {};
             return Response.status(200).entity(studentsEntity).build();
