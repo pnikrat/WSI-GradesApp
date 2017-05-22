@@ -27,9 +27,14 @@ public class GradesCollectionResource {
 
     @GET
     @Produces({"application/xml", "application/json"})
-    public Response getGrades() {
+    public Response getGrades(@QueryParam("studentIndex") Integer studentIndexParam) {
         if (parentCourse != null) {
-            List<Grade> grades = Model.getInstance().getCoursesContainer().getCourseGrades(parentCourse);
+            List<Grade> grades;
+            if (studentIndexParam == null)
+                grades = Model.getInstance().getCoursesContainer().getCourseGrades(parentCourse);
+            else
+                grades = Model.getInstance().getCoursesContainer().getCourseGradesByStudent(parentCourse, studentIndexParam);
+
             if (grades != null && grades.size() != 0) {
                 GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(grades) {};
                 return Response.status(200).entity(gradesEntity).build();

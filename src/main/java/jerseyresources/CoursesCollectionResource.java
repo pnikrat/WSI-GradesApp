@@ -3,16 +3,15 @@ package jerseyresources;
 import com.sun.javafx.sg.prism.NGShape;
 import entities.Course;
 import entities.Grade;
+import entities.Student;
 import server.Model;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 /**
  * Created by student on 26.02.2017.
@@ -81,6 +80,21 @@ public class CoursesCollectionResource {
         }
         else
             return Response.status(404).build();
+    }
+
+    @GET @Path("/grades")
+    @Produces({"application/xml", "application/json"})
+    public Response getSpecificStudentGradesFromAllCourses(@Context UriInfo uriInfo) {
+        MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
+        if (queryParams.containsKey("studentIndex") && queryParams.containsKey("comparator")
+                && queryParams.containsKey("gradeValue")) {
+            List<Grade> gradesOfStudent = Model.getInstance().getCoursesContainer().getAllStudentGrades(queryParams);
+            if (gradesOfStudent != null && gradesOfStudent.size() > 0) {
+                GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(gradesOfStudent) {};
+                return Response.status(200).entity(gradesEntity).build();
+            }
+        }
+        return Response.status(404).build();
     }
 
     @Path("/{courseid}/grades")
