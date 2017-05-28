@@ -25,12 +25,8 @@ public class StudentsCollectionResource {
             students = Model.getInstance().getStudentsContainer().getStudentsByNames(queryParams);
         else
             students = Model.getInstance().getStudentsContainer().getStudentsByBirthdays(queryParams, birthDateParam);
-        if (students.size() != 0) {
-            GenericEntity<List<Student>> studentsEntity = new GenericEntity<List<Student>>(students) {};
-            return Response.status(200).entity(studentsEntity).build();
-        }
-        else
-            return Response.noContent().build();
+        GenericEntity<List<Student>> studentsEntity = new GenericEntity<List<Student>>(students) {};
+        return Response.status(200).entity(studentsEntity).build();
     }
 
     @POST

@@ -26,12 +26,8 @@ public class CoursesCollectionResource {
             courses = Model.getInstance().getCoursesContainer().getCourses();
         else
             courses = Model.getInstance().getCoursesContainer().getCoursesByInstructor(specificInstructorParam);
-        if (courses.size() != 0) {
-            GenericEntity<List<Course>> coursesEntity = new GenericEntity<List<Course>>(courses) {};
-            return Response.status(200).entity(coursesEntity).build();
-        }
-        else
-            return Response.noContent().build();
+        GenericEntity<List<Course>> coursesEntity = new GenericEntity<List<Course>>(courses) {};
+        return Response.status(200).entity(coursesEntity).build();
     }
 
     @POST
@@ -86,13 +82,12 @@ public class CoursesCollectionResource {
     @Produces({"application/xml", "application/json"})
     public Response getSpecificStudentGradesFromAllCourses(@Context UriInfo uriInfo) {
         MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
-        if (queryParams.containsKey("studentIndex") && queryParams.containsKey("comparator")
-                && queryParams.containsKey("gradeValue")) {
+        if (queryParams.containsKey("studentIndex")) {
             List<Grade> gradesOfStudent = Model.getInstance().getCoursesContainer().getAllStudentGrades(queryParams);
-            if (gradesOfStudent != null && gradesOfStudent.size() > 0) {
-                GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(gradesOfStudent) {};
-                return Response.status(200).entity(gradesEntity).build();
-            }
+            if (gradesOfStudent == null)
+                gradesOfStudent = new ArrayList<>();
+            GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(gradesOfStudent) {};
+            return Response.status(200).entity(gradesEntity).build();
         }
         return Response.status(404).build();
     }

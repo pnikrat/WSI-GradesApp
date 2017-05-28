@@ -72,37 +72,44 @@ public class Courses {
     }
 
     public List<Grade> getAllStudentGrades(MultivaluedMap<String, String> queryParams) {
-        Integer studentIndexParam;
-        String comparatorParam;
-        Double gradeValueParam;
+        String studentIndexParam = queryParams.getFirst("studentIndex");
+        String comparatorParam = queryParams.getFirst("comparator");
+        String gradeValueParam = queryParams.getFirst("gradeValue");
+        Integer studentIndexParamConverted;
+        Double gradeValueParamConverted;
         try {
-            studentIndexParam = Integer.valueOf(queryParams.getFirst("studentIndex"));
-            comparatorParam = queryParams.getFirst("comparator");
-            gradeValueParam = Double.valueOf(queryParams.getFirst("gradeValue"));
+            studentIndexParamConverted = Integer.valueOf(studentIndexParam);
+            if (gradeValueParam != null)
+                gradeValueParamConverted = Double.valueOf(gradeValueParam);
+            else
+                gradeValueParamConverted = null;
         }
         catch (NumberFormatException e) {
             return null;
         }
 
-        List<Grade> studentGradesFromAllCourses = filterStudentGradesFromAllCourses(studentIndexParam);
+        List<Grade> studentGradesFromAllCourses = filterStudentGradesFromAllCourses(studentIndexParamConverted);
 
         List<Grade> studentFilteredGradesFromAllCourses = new ArrayList<>();
-        if (studentGradesFromAllCourses.size() > 0) {
+
+        if (studentGradesFromAllCourses.size() > 0 && gradeValueParam != null) {
             switch(comparatorParam) {
                 case "gt":
                     studentFilteredGradesFromAllCourses = studentGradesFromAllCourses.stream()
-                            .filter(x -> x.getConcreteGrade().getValue() > gradeValueParam).collect(Collectors.toList());
+                            .filter(x -> x.getConcreteGrade().getValue() > gradeValueParamConverted).collect(Collectors.toList());
                     break;
                 case "lt":
                     studentFilteredGradesFromAllCourses = studentGradesFromAllCourses.stream()
-                            .filter(x -> x.getConcreteGrade().getValue() < gradeValueParam).collect(Collectors.toList());
+                            .filter(x -> x.getConcreteGrade().getValue() < gradeValueParamConverted).collect(Collectors.toList());
                     break;
                 case "eq":
                     studentFilteredGradesFromAllCourses = studentGradesFromAllCourses.stream()
-                            .filter(x -> x.getConcreteGrade().getValue().equals(gradeValueParam)).collect(Collectors.toList());
+                            .filter(x -> x.getConcreteGrade().getValue().equals(gradeValueParamConverted)).collect(Collectors.toList());
                     break;
             }
         }
+        else
+            studentFilteredGradesFromAllCourses = studentGradesFromAllCourses;
         return studentFilteredGradesFromAllCourses;
     }
 

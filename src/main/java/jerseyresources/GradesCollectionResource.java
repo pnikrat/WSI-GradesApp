@@ -10,6 +10,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.Response;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,12 +36,11 @@ public class GradesCollectionResource {
             else
                 grades = Model.getInstance().getCoursesContainer().getCourseGradesByStudent(parentCourse, studentIndexParam);
 
-            if (grades != null && grades.size() != 0) {
-                GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(grades) {};
-                return Response.status(200).entity(gradesEntity).build();
-            }
-            else
-                return Response.noContent().build();
+            if (grades == null)
+                grades = new ArrayList<>();
+
+            GenericEntity<List<Grade>> gradesEntity = new GenericEntity<List<Grade>>(grades) {};
+            return Response.status(200).entity(gradesEntity).build();
         }
         else
             return Response.status(404).build();
