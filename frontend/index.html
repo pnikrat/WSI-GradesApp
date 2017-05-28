@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Student grade manager</title>
+    <link rel="stylesheet" type="text/css" href="site.css">
+</head>
+
+<body>
+    <header>
+        <div class="header_logo">
+            <img src="header_logo.png" width="128" alt="Student pictogram as logo" />
+        </div>
+        <div class="header_title">
+            <h1>Student Grade Manager</h1>
+        </div>
+    </header>
+    
+    <div id="main_content_view">
+
+        <nav class="menu">
+                <div><a href="#students_list">Students list</a></div>
+                <div><a href="#courses_list">Courses list</a></div>
+        </nav>
+
+        <section class="main_view">
+            <div class="collections">
+                <div id="students_list">
+                    <h2>List of students</h2>
+                    <form action="#grades_list">
+                        <table class="collections_table">
+                            <thead class="collections_header">
+                                <tr>
+                                    <th>Index</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Birth Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" value="112174" readonly></td>
+                                    <td><input type="text" value="Przemysław" required placeholder="Student first name"></td>
+                                    <td><input type="text" value="Nikratowicz" required placeholder="Student last name"></td>
+                                    <td><input type="date" value="1993-07-23" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                            <input type="submit" value="View grades">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="119345" readonly></td>
+                                    <td><input type="text" value="Jakub" required placeholder="Student first name"></td>
+                                    <td><input type="text" value="Piechociński" required placeholder="Student last name"></td>
+                                    <td><input type="date" value="1995-06-12" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                            <input type="submit" value="View grades">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="997345" readonly></td>
+                                    <td><input type="text" value="Kamila" required placeholder="Student first name"></td>
+                                    <td><input type="text" value="Kochanowska" required placeholder="Student last name"></td>
+                                    <td><input type="date" value="1997-02-23" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                            <input type="submit" value="View grades">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="courses_list">
+                    <h2>List of courses</h2>
+                    <form>
+                        <table class="collections_table">
+                            <thead class="collections_header">
+                                <tr>
+                                    <th>Course Name</th>
+                                    <th>Course Instructor</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" value="WSI" required placeholder="Course name"></td>
+                                    <td><input type="text" value="dr inż. Tomasz Pawlak" required placeholder="Course instructor"></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" value="MIU" required placeholder="Course name"></td>
+                                    <td><input type="text" value="dr inż. Bartłomiej Prędki" required placeholder="Course instructor"></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="text" value="ED" required placeholder="Course name"></td>
+                                    <td><input type="text" value="dr inż. Robert Susmaga" required placeholder="Course instructor"></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+
+                <div id="grades_list">
+                    <h2>List of {student_name} grades</h2>
+                    <form>
+                        <select id="course_selector">
+                        <option value="WSI">WSI</option>
+                        <option value="MIU">MIU</option>
+                        <option value="ED">ED</option>
+                    </select>
+                        <table class="collections_table">
+                            <thead class="collections_header">
+                                <tr>
+                                    <th>Grade value</th>
+                                    <th>Date of grade</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="number" value="4.0" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
+                                    <td><input type="date" value="2006-05-23" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="2.0" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
+                                    <td><input type="date" value="2010-04-21" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><input type="number" value="3.5" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
+                                    <td><input type="date" value="2017-02-12" required></td>
+                                    <td>
+                                        <div>
+                                            <input type="submit" value="Create/Edit">
+                                            <input type="submit" value="Delete">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
+            </div>
+
+
+
+        </section>
+    </div>
+    <footer class="footer_element">
+        <div>
+            <p>Site created by Przemysław Nikratowicz</p>
+            <a href="http://www.put.poznan.pl">Poznan University of Technology</a>
+            <br>
+            <a href="http://www.cs.put.poznan.pl/tpawlak">Teacher's website</a>
+        </div>
+    </footer>
+</body>
+
+</html>
