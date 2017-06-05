@@ -1,58 +1,85 @@
-/*
-* {
-    border: 2px solid black;
-}
-*/
-
 body {
-    font: 16px Georgia, sans-serif; 
+    font: 16px 'Ubuntu', Helvetica, Arial, sans-serif;
+    width: 100%;
+    margin: 0 0 0 0;
     display: flex;
     flex-direction: column;
+    background-color: #f2f2f2;
 }
 
-.header_logo, .header_title {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Lato', Arial, sans-serif;
+}
+
+.header_logo,
+.header_title {
     float: left;
     display: inline;
     margin: 10px 10px 10px 10px;
-    
 }
 
 .header_title {
     font-size: 1.5em;
+    color: #fff;
 }
 
 header {
-    background-color: aliceblue;
+    width: inherit;
+    background-color: #731509;
+}
+
+.footer_element {
+    width: inherit;
+    background-image: linear-gradient(45deg, #f2f2f2, #5A4232);
+}
+
+.footer_element>div {
+    margin: 10px 10px 10px 10px;
 }
 
 #main_content_view {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 30px;
+    background-color: #f2f2f2;
 }
 
 nav {
-    margin-right: 10px;
     display: flex;
     flex: 1 0 100px;
     flex-direction: column;
+    width: inherit;
 }
 
-nav > div {
+nav>div {
     padding: 5px 5px 5px 5px;
-    margin-top: 1px;
     display: flex;
-    border: 2px solid black;
-    background-color: azure;
+    background-color: #C02F1D;
+}
+
+#menu_first_item {
+    border-bottom: 1px solid #f2f2f2;
+}
+
+nav>div>a {
+    color: #fff;
+    font-size: 1em;
 }
 
 a {
     margin: auto;
-    color: #555;
+    color: #000;
     text-decoration: none;
+    font-family: inherit;
+    font-size: 0.8em;
 }
 
 a:hover {
-    color: #222;
     text-decoration: underline;
 }
 
@@ -61,19 +88,139 @@ section {
     flex: 2 1 80%;
 }
 
+/* table specific rules */
 
+td {
+    padding: 0 0 0 0;
+}
 
-li {
-    margin: 10px 0px 10px 0px;
-    list-style-type: none;
+input:invalid {
+    background-color: #C02F1D;
+    color: #fff;
+}
+
+input {
+    font: inherit;
+}
+
+td>input {
+    margin: 0 0 0 0;
+    background-color: inherit;
+    border: none;
+    width: 100%;
+    height: 20px;
+    padding-left: 5px;
+    box-sizing: border-box;
+}
+
+.collections_header {
+    background-color: #00BF60;
+}
+
+.search_icon {
+    float: right;
+    margin-right: 5px;
+}
+
+th {
+    font-size: 1.1em;
+    font-family: 'Lato', Arial, sans-serif;
+}
+
+table tbody tr:hover td {
+    background-color: #BFB1AC;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #D8D8D8;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: #B2B2B2;
 }
 
 /* Specific to menu navigation */
 
-.collections > div {
+.collections>div {
     display: none;
 }
 
-.collections > div:target {
+.collections>div:target {
     display: block;
+}
+
+/* mobilka */
+
+@media only screen and (max-width: 688px) {
+    .header_logo {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 768px),
+(max-device-width: 768px) {
+    /* Force table to not be like tables anymore */
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+        display: block;
+    }
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    tr {
+        border: 1px solid #ccc;
+    }
+    td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        padding-left: 50%;
+    }
+    td:before {
+        position: absolute;
+        top: 1px;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+    }
+    #students_list td:nth-of-type(1):before {
+        content: "Index";
+    }
+    #students_list td:nth-of-type(2):before {
+        content: "First Name";
+    }
+    #students_list td:nth-of-type(3):before {
+        content: "Last Name";
+    }
+    #students_list td:nth-of-type(4):before {
+        content: "Birth Date";
+    }
+    #students_list td:nth-of-type(5):before {
+        content: "Actions";
+    }
+    #courses_list td:nth-of-type(1):before {
+        content: "Course Name";
+    }
+    #courses_list td:nth-of-type(2):before {
+        content: "Course Instructor";
+    }
+    #courses_list td:nth-of-type(3):before {
+        content: "Actions";
+    }
+    #grades_list td:nth-of-type(1):before {
+        content: "Grade value";
+    }
+    #grades_list td:nth-of-type(2):before {
+        content: "Date of grade";
+    }
+    #grades_list td:nth-of-type(3):before {
+        content: "Actions";
+    }
 }

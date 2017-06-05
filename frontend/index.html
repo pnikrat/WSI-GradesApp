@@ -4,24 +4,27 @@
 <head>
     <meta charset="utf-8">
     <title>Student grade manager</title>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
     <link rel="stylesheet" type="text/css" href="site.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
     <header>
         <div class="header_logo">
-            <img src="header_logo.png" width="128" alt="Student pictogram as logo" />
+            <img src="header_logo2.png" width="128" alt="Student pictogram as logo" />
         </div>
         <div class="header_title">
             <h1>Student Grade Manager</h1>
         </div>
     </header>
-    
+
     <div id="main_content_view">
 
         <nav class="menu">
-                <div><a href="#students_list">Students list</a></div>
-                <div><a href="#courses_list">Courses list</a></div>
+            <div id="menu_first_item"><a href="#students_list">Students list</a></div>
+            <div><a href="#courses_list">Courses list</a></div>
         </nav>
 
         <section class="main_view">
@@ -32,10 +35,10 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Index</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Birth Date</th>
+                                    <th>Index<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>First Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Last Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Birth Date<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -90,8 +93,8 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Course Name</th>
-                                    <th>Course Instructor</th>
+                                    <th>Course Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Course Instructor<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -142,8 +145,8 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Grade value</th>
-                                    <th>Date of grade</th>
+                                    <th>Grade value<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Date of grade<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
