@@ -51,7 +51,7 @@ header {
 
 nav {
     display: flex;
-    flex: 1 0 100px;
+    flex: 1 0 150px;
     flex-direction: column;
     width: inherit;
 }
@@ -85,7 +85,7 @@ a:hover {
 
 section {
     margin-left: 10px;
-    flex: 2 1 80%;
+    flex: 3 1 80%;
 }
 
 /* table specific rules */
@@ -222,5 +222,62 @@ table tbody tr:nth-child(even) {
     }
     #grades_list td:nth-of-type(3):before {
         content: "Actions";
+    }
+}
+
+@media print {
+    body {
+        background: transparent;
+        color: #000
+        box-shadow: none;
+        text-shadow: none;
+    }
+    
+    section {
+        margin: 0 0 0 0;
+    }
+    
+    section, table, div {
+        background: transparent;
+        background-color: #fff;
+    }
+    
+    header, footer, nav, img {
+        display: none;
+    }
+    
+    thead {
+        display: table-header-group;
+        background: transparent !important;
+    }  
+    
+    tr {
+        page-break-inside: avoid;
+        background: transparent !important;
+    }
+    
+    table td:last-child {
+        display: none;
+    }
+    
+    table th:last-child {
+        display: none;
+    }
+    
+    table td {
+        border-top: solid 1px black !important;
+    }
+    
+    table {
+        border-collapse: collapse;
+    }
+
+    table tbody tr:hover td {
+        background: transparent;
+    }
+    
+    h2,
+    h3 {
+        page-break-after: avoid;
     }
 }
