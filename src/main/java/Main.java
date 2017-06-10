@@ -7,6 +7,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 import org.mongodb.morphia.Datastore;
 import org.mongodb.morphia.Morphia;
 import server.Model;
+import utilities.CustomHeaders;
 import utilities.DateParamConverterProvider;
 
 import javax.ws.rs.core.UriBuilder;
@@ -22,6 +23,7 @@ public class Main {
                 CoursesCollectionResource.class,
                 GradesCollectionResource.class);
         config.register(new DateParamConverterProvider("yyyy-MM-dd"));
+        config.register(new CustomHeaders());
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
         Model.getInstance();
     }
