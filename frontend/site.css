@@ -103,7 +103,7 @@ input {
     font: inherit;
 }
 
-td>input {
+td>input, th input {
     margin: 0 0 0 0;
     background-color: inherit;
     border: none;
@@ -131,11 +131,13 @@ td>input {
     font: inherit;
 }
 
-.search_icon {
-    float: right;
-    margin-right: 5px;
-    margin-left: 15px;
+
+.search_div input {
+    background: url(images/menu_search.png) left no-repeat;
+    text-indent: 15px;
+    font: 16px 'Ubuntu', Helvetica, Arial, sans-serif;
 }
+
 
 th {
     font-size: 1.1em;
@@ -183,14 +185,23 @@ table tbody tr:nth-child(even) {
     tr {
         display: block;
     }
-    thead tr {
-        position: absolute;
-        top: -9999px;
-        left: -9999px;
+
+    thead tr th:last-child {
+        display: none;
     }
+    
+    thead tr {
+        display: flex;
+    }
+    
+    thead tr th {
+        flex: 1 1 100%;
+    }
+    
     tr {
         border: 1px solid #ccc;
     }
+    
     td {
         border: none;
         border-bottom: 1px solid #eee;
@@ -269,6 +280,10 @@ table tbody tr:nth-child(even) {
     
     tr {
         page-break-inside: avoid;
+        background: transparent !important;
+    }
+    
+    input {
         background: transparent !important;
     }
     

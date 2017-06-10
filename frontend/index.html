@@ -13,7 +13,7 @@
 <body>
     <header>
         <div class="header_logo">
-            <img src="header_logo2.png" width="128" alt="Student pictogram as logo" />
+            <img src="images/header_logo2.png" width="128" alt="Student pictogram as logo" />
         </div>
         <div class="header_title">
             <h1>Student Grade Manager</h1>
@@ -35,10 +35,27 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Index<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
-                                    <th>First Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
-                                    <th>Last Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
-                                    <th>Birth Date<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>
+                                        Index
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
+                                    <th>First Name
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
+                                    <th>Last Name
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
+                                    <th>Birth Date
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -93,8 +110,16 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Course Name<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
-                                    <th>Course Instructor<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Course Name
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
+                                    <th>Course Instructor
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -147,8 +172,16 @@
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
-                                    <th>Grade value<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
-                                    <th>Date of grade<div class="search_icon"><img src="menu_search.png" alt="Find icon"/></div></th>
+                                    <th>Grade value
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
+                                    <th>Date of grade
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -201,6 +234,10 @@
             <a href="http://www.cs.put.poznan.pl/tpawlak">Teacher's website</a>
         </div>
     </footer>
+    <script type="text/javascript" src="libjs/jquery-3.2.1.js"></script>
+    <script type="text/javascript" src="libjs/knockout-3.4.2.js"></script>
+    <script type="text/javascript" src="libjs/knockout.mapping-latest.js"></script>
+    <script type="text/javascript" src="site.js"></script>
 </body>
 
 </html>
