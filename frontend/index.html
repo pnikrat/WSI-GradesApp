@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Student grade manager</title>
+    <link rel="icon" type="image/png" href="images/favicon.ico">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Lato">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu">
     <link rel="stylesheet" type="text/css" href="site.css">
@@ -27,11 +28,11 @@
             <div><a href="#courses_list">Courses list</a></div>
         </nav>
 
-        <section class="main_view">
+        <div class="main_view">
             <div class="collections">
-                <div id="students_list">
+                <section id="students_list">
                     <h2>List of students</h2>
-                    <form action="#grades_list">
+                    <form action="">
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
@@ -59,52 +60,26 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody data-bind="foreach: students">
                                 <tr>
-                                    <td><input type="number" value="112174" readonly></td>
-                                    <td><input type="text" value="Przemysław" required placeholder="Student first name"></td>
-                                    <td><input type="text" value="Nikratowicz" required placeholder="Student last name"></td>
-                                    <td><input type="date" value="1993-07-23" required></td>
+                                    <td><input type="number" data-bind="value: index" readonly></td>
+                                    <td><input type="text" data-bind="value: firstName" required placeholder="Student first name"></td>
+                                    <td><input type="text" data-bind="value: lastName" required placeholder="Student last name"></td>
+                                    <td><input type="date" data-bind="value: birthDate" required></td>
                                     <td>
                                         <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
-                                            <input type="submit" value="View grades">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="number" value="119345" readonly></td>
-                                    <td><input type="text" value="Jakub" required placeholder="Student first name"></td>
-                                    <td><input type="text" value="Piechociński" required placeholder="Student last name"></td>
-                                    <td><input type="date" value="1995-06-12" required></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
-                                            <input type="submit" value="View grades">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="number" value="997345" readonly></td>
-                                    <td><input type="text" value="Kamila" required placeholder="Student first name"></td>
-                                    <td><input type="text" value="Kochanowska" required placeholder="Student last name"></td>
-                                    <td><input type="date" value="1997-02-23" required></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
+                                            <input type="submit" data-bind="click: $parent.studentsContainer.deleteRow" value="Delete">
                                             <input type="submit" value="View grades">
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                        <input class="add_button" id="student_add_button" type="submit" value="Add student">
                     </form>
-                </div>
+                </section>
 
-                <div id="courses_list">
+                <section id="courses_list">
                     <h2>List of courses</h2>
                     <form>
                         <table class="collections_table">
@@ -123,50 +98,29 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody data-bind="foreach: courses">
                                 <tr>
-                                    <td><input type="text" value="WSI" required placeholder="Course name"></td>
-                                    <td><input type="text" value="dr inż. Tomasz Pawlak" required placeholder="Course instructor"></td>
+                                    <td><input type="text" data-bind="value: courseName" required placeholder="Course name"></td>
+                                    <td><input type="text" data-bind="value: courseInstructor" required placeholder="Course instructor"></td>
                                     <td>
                                         <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" value="MIU" required placeholder="Course name"></td>
-                                    <td><input type="text" value="dr inż. Bartłomiej Prędki" required placeholder="Course instructor"></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="text" value="ED" required placeholder="Course name"></td>
-                                    <td><input type="text" value="dr inż. Robert Susmaga" required placeholder="Course instructor"></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
+                                            <input type="submit" data-bind="click: $parent.coursesContainer.deleteRow" value="Delete">
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
+                        <input class="add_button" id="course_add_button" type="submit" value="Add course">
                     </form>
-                </div>
+                </section>
 
-                <div id="grades_list">
+                <section id="grades_list">
                     <h2>List of {student_name} grades</h2>
                     <form>
                         <div id="course_selector_container">
-                            <select id="course_selector">
-                            <option value="WSI">WSI</option>
-                            <option value="MIU">MIU</option>
-                            <option value="ED">ED</option>
+                            <select id="course_selector" data-bind="options: courses, optionsText: function(item) {
+                                                                    return item.courseName
+                                                                    }">
                             </select>
                         </div>
                         <table class="collections_table">
@@ -191,7 +145,6 @@
                                     <td><input type="date" value="2006-05-23" required></td>
                                     <td>
                                         <div>
-                                            <input type="submit" value="Create/Edit">
                                             <input type="submit" value="Delete">
                                         </div>
                                     </td>
@@ -218,13 +171,14 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <input class="add_button" id="grade_add_button" type="submit" value="Add student">
                     </form>
-                </div>
+                </section>
             </div>
 
 
 
-        </section>
+        </div>
     </div>
     <footer class="footer_element">
         <div>

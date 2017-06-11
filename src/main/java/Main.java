@@ -23,7 +23,7 @@ public class Main {
                 CoursesCollectionResource.class,
                 GradesCollectionResource.class);
         config.register(new DateParamConverterProvider("yyyy-MM-dd"));
-        config.register(new CustomHeaders());
+        config.register(CustomHeaders.class);
         HttpServer server = GrizzlyHttpServerFactory.createHttpServer(baseUri, config);
         Model.getInstance();
     }

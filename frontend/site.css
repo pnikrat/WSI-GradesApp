@@ -83,12 +83,20 @@ a:hover {
     text-decoration: underline;
 }
 
-section {
+.main_view {
     margin-left: 10px;
     flex: 3 1 80%;
 }
 
+.add_button {
+    margin-top: 10px;
+}
+
 /* table specific rules */
+
+table {
+    width: 100%;
+}
 
 td {
     padding: 0 0 0 0;
@@ -158,11 +166,11 @@ table tbody tr:nth-child(even) {
 
 /* Specific to menu navigation */
 
-.collections>div {
+.collections>section {
     display: none;
 }
 
-.collections>div:target {
+.collections>section:target {
     display: block;
 }
 
