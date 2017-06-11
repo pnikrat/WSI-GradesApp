@@ -8,37 +8,45 @@ var DataContainer = function (url, objectIdParameterName) {
     self.content = ko.observableArray();
     self.url = url;
     
-    self.getRequest = $.ajax({
-        url: self.url,
-        dataType: "json"
-    });
-    self.getRequest.done(function (data) {
-        if (self.content.subscription !== undefined) {
-            self.content.subscription.dispose();
-        }
-        data.forEach(function (element, index, array) {
-            var row_of_data = element;
-            row_of_data = ko.mapping.fromJS(row_of_data);
-            self.content.push(row_of_data);
-            ko.computed(function () {
-                return ko.mapping.toJS(row_of_data);
-            })
-                .subscribe(function () {
-                    self.updateRequest(row_of_data);
-                });
-        });
-        
-        self.content.subscribe(function (arrayChanges) {
-            arrayChanges.forEach(function (change) {
-                if (change.status === 'added') {
-                    console.log("Adding");
-                    self.postRequest(change.value);
-                } else if (change.status === 'deleted') {
-                    self.deleteRequest(change.value);
+    self.getRequest = function () {
+        $.ajax({
+            url: self.url,
+            dataType: "json"
+        })
+            .done(function (data) {
+                if (self.subscriptionHandler !== undefined) {
+                    self.subscriptionHandler.dispose();
                 }
+                self.content([]);
+                data.forEach(function (element, index, array) {
+                    if (!ko.utils.arrayFirst(self.content(), function (existingItem, element) {
+                            return existingItem[objectIdParameterName] === element[objectIdParameterName];
+                        })) {
+                        var row_of_data = element;
+                        row_of_data = ko.mapping.fromJS(row_of_data);
+                        self.content.push(row_of_data);
+                        ko.computed(function () {
+                            return ko.mapping.toJS(row_of_data);
+                        })
+                            .subscribe(function () {
+                                self.updateRequest(row_of_data);
+                            });
+                    }
+
+                });
+            
+                self.subscriptionHandler = self.content.subscribe(function (arrayChanges) {
+                    arrayChanges.forEach(function (change) {
+                        if (change.status === 'added') {
+                            self.postRequest(change.value);
+                        } else if (change.status === 'deleted') {
+                            self.deleteRequest(change.value);
+                        }
+                    });
+                }, null, "arrayChange");
+            
             });
-        }, null, "arrayChange");
-    });
+    };
 
     self.updateRequest = function (row) {
         console.log(row[objectIdParameterName]());
@@ -91,26 +99,33 @@ var DataContainer = function (url, objectIdParameterName) {
             contentType: "application/json"
         });
     };
-    
+    return self;
 };
 
 function ViewModel() {
     var self = this;
+    
     self.studentsContainer = new DataContainer(serverAddress + "students", "index");
     self.students = self.studentsContainer.content;
+    self.studentsContainer.getRequest();
 
     self.coursesContainer = new DataContainer(serverAddress + "courses", "objectId");
     self.courses = self.coursesContainer.content;
+    self.coursesContainer.getRequest();
+    
+    self.gradesContainer = new DataContainer(serverAddress, "objectId");
+    self.grades = self.gradesContainer.content;
+    
+    self.initGradesViewModel = function (coursesRow) {
+        var currentCourseId = coursesRow.objectId();
+        self.gradesContainer.url = serverAddress + "courses/" + currentCourseId + "/grades";
+        self.gradesContainer.getRequest();
+    };
+    
 
-    //    var courseId = self.courses()[0].objectId;
-    //    self.grades_container = new DataContainer(severAddress + "course" + courseId + "/grades")
 }
 
 var model = new ViewModel();
-
-$(document).ready(function () {
-    ko.applyBindings(model);
-});
 
 var student_add_button = "#student_add_button";
 var course_add_button = "#course_add_button";
@@ -122,4 +137,14 @@ $(student_add_button).click(function () {
 
 $(course_add_button).click(function () {
     model.courses.push(ko.mapping.fromJS({objectId: null, courseName: null, courseInstructor: null}));
+});
+
+$(grade_add_button).click(function () {
+    model.grades.push(ko.mapping.fromJS({objectId: null, concreteGrade: null, dateOfGrade: null, concreteStudent: null}));
+});
+
+
+$(document).ready(function () {
+//    ko.options.deferUpdates = true;
+    ko.applyBindings(model);
 });

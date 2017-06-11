@@ -32,7 +32,7 @@
             <div class="collections">
                 <section id="students_list">
                     <h2>List of students</h2>
-                    <form action="">
+                    <form>
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
@@ -69,7 +69,6 @@
                                     <td>
                                         <div>
                                             <input type="submit" data-bind="click: $parent.studentsContainer.deleteRow" value="Delete">
-                                            <input type="submit" value="View grades">
                                         </div>
                                     </td>
                                 </tr>
@@ -105,6 +104,7 @@
                                     <td>
                                         <div>
                                             <input type="submit" data-bind="click: $parent.coursesContainer.deleteRow" value="Delete">
+                                            <input type="button" data-bind="click: $parent.initGradesViewModel" value="View grades" onclick="location.href='#grades_list'">
                                         </div>
                                     </td>
                                 </tr>
@@ -115,14 +115,8 @@
                 </section>
 
                 <section id="grades_list">
-                    <h2>List of {student_name} grades</h2>
+                    <h2>List of grades from "{course_name}" course</h2>
                     <form>
-                        <div id="course_selector_container">
-                            <select id="course_selector" data-bind="options: courses, optionsText: function(item) {
-                                                                    return item.courseName
-                                                                    }">
-                            </select>
-                        </div>
                         <table class="collections_table">
                             <thead class="collections_header">
                                 <tr>
@@ -136,42 +130,28 @@
                                             <input type="search">
                                         </div>
                                     </th>
+                                    <th>Graded student
+                                        <div class="search_div">
+                                            <input type="search">
+                                        </div>
+                                    </th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody data-bind="foreach: grades">
                                 <tr>
-                                    <td><input type="number" value="4.0" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
-                                    <td><input type="date" value="2006-05-23" required></td>
+                                    <td><input type="number" data-bind="value: concreteGrade" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
+                                    <td><input type="date" data-bind="value: dateOfGrade" required></td>
+                                    <td><select data-bind="options: concreteStudent, optionsText: 'index'"></select></td>
                                     <td>
                                         <div>
-                                            <input type="submit" value="Delete">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="number" value="2.0" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
-                                    <td><input type="date" value="2010-04-21" required></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
-                                            <input type="submit" value="Delete">
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><input type="number" value="3.5" required placeholder="Course grade" step="0.5" min="2.0" max="5.0"></td>
-                                    <td><input type="date" value="2017-02-12" required></td>
-                                    <td>
-                                        <div>
-                                            <input type="submit" value="Create/Edit">
                                             <input type="submit" value="Delete">
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <input class="add_button" id="grade_add_button" type="submit" value="Add student">
+                        <input class="add_button" id="grade_add_button" type="submit" value="Add grade">
                     </form>
                 </section>
             </div>
