@@ -50,11 +50,11 @@ public class GradesCollectionResource {
     @Consumes({"application/xml", "application/json"})
     public Response createGrade(Grade newGrade) {
         if (parentCourse != null) {
-            Integer studentsIndex = newGrade.getConcreteStudent().getIndex();
-            Student studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
-            if (studentForGrading == null)
-                return Response.status(404).build();
-            newGrade.setConcreteStudent(studentForGrading);
+//            Integer studentsIndex = newGrade.getConcreteStudent().getIndex();
+//            Student studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
+//            if (studentForGrading == null)
+//                return Response.status(404).build();
+//            newGrade.setConcreteStudent(studentForGrading);
             newGrade.setObjectId(new ObjectId());
             parentCourse.addGrade(newGrade);
             Model.getInstance().getCoursesContainer().commitCourseWithGradesChanges(parentCourse);
@@ -83,13 +83,15 @@ public class GradesCollectionResource {
         if (parentCourse != null) {
             Grade previousGrade = parentCourse.findSingleGrade(gradeId);
             if (previousGrade != null) {
-                Integer studentsIndex = editedGrade.getConcreteStudent().getIndex();
-                Student studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
-                if (studentForGrading == null)
-                    return Response.status(404).build();
+                Student studentForGrading = editedGrade.getConcreteStudent();
+                if (studentForGrading != null) {
+                    Integer studentsIndex = studentForGrading.getIndex();
+                    studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
+                }
                 parentCourse.removeGrade(previousGrade);
                 editedGrade.replaceGradeId(gradeId);
-                editedGrade.setConcreteStudent(studentForGrading);
+                if (studentForGrading != null)
+                    editedGrade.setConcreteStudent(studentForGrading);
                 parentCourse.addGrade(editedGrade);
                 Model.getInstance().getCoursesContainer().commitCourseWithGradesChanges(parentCourse);
                 return Response.status(200).build();

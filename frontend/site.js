@@ -23,7 +23,11 @@ var DataContainer = function (url, objectIdParameterName) {
                             return existingItem[objectIdParameterName] === element[objectIdParameterName];
                         })) {
                         var row_of_data = element;
-                        row_of_data = ko.mapping.fromJS(row_of_data);
+                        if (self.additionalMapping !== undefined) {
+                            row_of_data = ko.mapping.fromJS(row_of_data, self.additionalMapping);
+                        } else {
+                            row_of_data = ko.mapping.fromJS(row_of_data);
+                        }
                         self.content.push(row_of_data);
                         ko.computed(function () {
                             return ko.mapping.toJS(row_of_data);
@@ -55,9 +59,7 @@ var DataContainer = function (url, objectIdParameterName) {
             dataType: "json",
             method: "PUT",
             contentType: "application/json",
-            data: ko.mapping.toJSON(row, {
-                ignore: ["grades", "index", "objectId"]
-            })
+            data: ko.mapping.toJSON(row)
         });
     };
 
@@ -79,12 +81,15 @@ var DataContainer = function (url, objectIdParameterName) {
                     });
                 }
                 ko.computed(function () {
-                    return ko.mapping.toJS(row);
+                    return ko.mapping.toJS(row, self.additionalMapping);
                 })
                     .subscribe(function () {
                         self.updateRequest(row);
                     });
             });
+//            .beforeSend(function (xhr) {
+//                
+//            })
     };
     
     self.deleteRow = function (row) {
@@ -102,11 +107,28 @@ var DataContainer = function (url, objectIdParameterName) {
     return self;
 };
 
+function StudentWithDisplayName(data) {
+    ko.mapping.fromJS(data, {}, this);
+    this.studentDisplayName = ko.computed(function () {
+        return this.index() + ' - ' + this.firstName() + ' ' + this.lastName();
+    }, this);
+}
+
+var studentsMapping = {
+    create: function (options) {
+        return new StudentWithDisplayName(options.data);
+    },
+    key: function (data) {
+        return ko.utils.unwrapObservable(data.index);
+    }
+};
+
 function ViewModel() {
     var self = this;
     
     self.studentsContainer = new DataContainer(serverAddress + "students", "index");
     self.students = self.studentsContainer.content;
+    self.studentsContainer.additionalMapping = studentsMapping;
     self.studentsContainer.getRequest();
 
     self.coursesContainer = new DataContainer(serverAddress + "courses", "objectId");
@@ -114,10 +136,12 @@ function ViewModel() {
     self.coursesContainer.getRequest();
     
     self.gradesContainer = new DataContainer(serverAddress, "objectId");
+    self.gradesContainer.currentCourseName = ko.observable();
     self.grades = self.gradesContainer.content;
     
     self.initGradesViewModel = function (coursesRow) {
         var currentCourseId = coursesRow.objectId();
+        self.gradesContainer.currentCourseName(coursesRow.courseName());
         self.gradesContainer.url = serverAddress + "courses/" + currentCourseId + "/grades";
         self.gradesContainer.getRequest();
     };
@@ -127,20 +151,41 @@ function ViewModel() {
 
 var model = new ViewModel();
 
-var student_add_button = "#student_add_button";
-var course_add_button = "#course_add_button";
-var grade_add_button = "#grade_add_button";
 
-$(student_add_button).click(function () {
+
+var studentAddButton = "#student_add_button";
+var courseAddButton = "#course_add_button";
+var gradeAddButton = "#grade_add_button";
+var dummyStudent = {
+    index: null,
+    firstName: null,
+    lastName: null,
+    birthDate: null
+};
+var dummyCourse = {
+    objectId: null,
+    courseName: null,
+    courseInstructor: null
+};
+var dummyGrade = {
+    objectId: null,
+    concreteGrade: null,
+    concreteStudent: dummyStudent,
+    dateOfGrade: null
+
+};
+
+$(studentAddButton).click(function () {
     model.students.push(ko.mapping.fromJS({index: null, firstName: null, lastName: null, birthDate: null}));
 });
 
-$(course_add_button).click(function () {
+$(courseAddButton).click(function () {
     model.courses.push(ko.mapping.fromJS({objectId: null, courseName: null, courseInstructor: null}));
 });
 
-$(grade_add_button).click(function () {
-    model.grades.push(ko.mapping.fromJS({objectId: null, concreteGrade: null, dateOfGrade: null, concreteStudent: null}));
+$(gradeAddButton).click(function () {
+    dummyGrade.concreteStudent.index = null;
+    model.grades.push(ko.mapping.fromJS(dummyGrade, {'include': ["concreteStudent.index"]}));
 });
 
 

@@ -107,11 +107,11 @@ input:invalid {
     color: #fff;
 }
 
-input {
+input, select {
     font: inherit;
 }
 
-td>input, th input {
+td>input, th input, td select {
     margin: 0 0 0 0;
     background-color: inherit;
     border: none;
@@ -124,19 +124,6 @@ td>input, th input {
 
 .collections_header {
     background-color: #00BF60;
-}
-
-#course_selector_container {
-    margin: 0 0 10px 0;
-    padding-left: 2.5px;
-}
-
-#course_selector {
-    width: 100px;
-    height: 20px;
-    border: none;
-    background-color: #D8D8D8;
-    font: inherit;
 }
 
 
@@ -272,6 +259,10 @@ table tbody tr:nth-child(even) {
         margin: 0 0 0 0;
     }
     
+    .main_view {
+        margin: 0 0 0 0;
+    }
+    
     section, table, div {
         background: transparent;
         background-color: #fff;
@@ -315,7 +306,7 @@ table tbody tr:nth-child(even) {
         background: transparent;
     }
     
-    #course_selector {
+    .add_button {
         display: none;
     }
     
@@ -336,5 +327,17 @@ table tbody tr:nth-child(even) {
     input::-webkit-calendar-picker-indicator {
         display: none;
         -webkit-appearance: none;
+    }
+    
+    select {
+        /*for firefox*/
+        -moz-appearance: none;
+        /*for chrome*/
+        -webkit-appearance:none;
+      }
+
+    /*for IE10*/
+    select::-ms-expand {
+        display: none;
     }
 }
