@@ -75,11 +75,11 @@ public class Model {
 
         List<Grade> firstGradesList = new ArrayList<>();
 
-        Grade grd1 = new Grade(GradeValue.FIVE, DateUtilities.fromYearMonthDay(2013, 10, 10), std1);
+        Grade grd1 = new Grade(GradeValue.FIVE, DateUtilities.fromYearMonthDay(2013, 10, 10), std1.getIndex());
         firstGradesList.add(grd1);
-        Grade grd2 = new Grade(GradeValue.FOURHALF, DateUtilities.fromYearMonthDay(2013, 11, 2), std1);
+        Grade grd2 = new Grade(GradeValue.FOURHALF, DateUtilities.fromYearMonthDay(2013, 11, 2), std1.getIndex());
         firstGradesList.add(grd2);
-        Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2);
+        Grade grd3 = new Grade(GradeValue.THREEHALF, DateUtilities.fromYearMonthDay(2013, 12, 18), std2.getIndex());
         firstGradesList.add(grd3);
 
         coursesContainer.setGradesObjectIdField(firstGradesList);

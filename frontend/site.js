@@ -170,22 +170,21 @@ var dummyCourse = {
 var dummyGrade = {
     objectId: null,
     concreteGrade: null,
-    concreteStudent: dummyStudent,
+    concreteStudentIndex: null,
     dateOfGrade: null
 
 };
 
 $(studentAddButton).click(function () {
-    model.students.push(ko.mapping.fromJS({index: null, firstName: null, lastName: null, birthDate: null}));
+    model.students.push(ko.mapping.fromJS(dummyStudent));
 });
 
 $(courseAddButton).click(function () {
-    model.courses.push(ko.mapping.fromJS({objectId: null, courseName: null, courseInstructor: null}));
+    model.courses.push(ko.mapping.fromJS(dummyCourse));
 });
 
 $(gradeAddButton).click(function () {
-    dummyGrade.concreteStudent.index = null;
-    model.grades.push(ko.mapping.fromJS(dummyGrade, {'include': ["concreteStudent.index"]}));
+    model.grades.push(ko.mapping.fromJS(dummyGrade));
 });
 
 

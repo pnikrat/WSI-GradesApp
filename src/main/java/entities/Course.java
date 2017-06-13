@@ -65,7 +65,7 @@ public class Course {
 
     public void removeStudentGrades(Student studentBeingRemoved) {
         if (courseGrades != null)
-            courseGrades.removeIf(x -> x.getConcreteStudent().getIndex().equals(studentBeingRemoved.getIndex()));
+            courseGrades.removeIf(x -> x.getConcreteStudentIndex().equals(studentBeingRemoved.getIndex()));
     }
 
     public Grade findSingleGrade(String gradeId) {

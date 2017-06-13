@@ -50,11 +50,11 @@ public class GradesCollectionResource {
     @Consumes({"application/xml", "application/json"})
     public Response createGrade(Grade newGrade) {
         if (parentCourse != null) {
-//            Integer studentsIndex = newGrade.getConcreteStudent().getIndex();
+//            Integer studentsIndex = newGrade.getConcreteStudentIndex().getIndex();
 //            Student studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
 //            if (studentForGrading == null)
 //                return Response.status(404).build();
-//            newGrade.setConcreteStudent(studentForGrading);
+//            newGrade.setConcreteStudentIndex(studentForGrading);
             newGrade.setObjectId(new ObjectId());
             parentCourse.addGrade(newGrade);
             Model.getInstance().getCoursesContainer().commitCourseWithGradesChanges(parentCourse);
@@ -83,15 +83,11 @@ public class GradesCollectionResource {
         if (parentCourse != null) {
             Grade previousGrade = parentCourse.findSingleGrade(gradeId);
             if (previousGrade != null) {
-                Student studentForGrading = editedGrade.getConcreteStudent();
-                if (studentForGrading != null) {
-                    Integer studentsIndex = studentForGrading.getIndex();
-                    studentForGrading = Model.getInstance().getStudentsContainer().findStudentByIndex(studentsIndex);
-                }
+                Integer studentIndexForGrading = editedGrade.getConcreteStudentIndex();
                 parentCourse.removeGrade(previousGrade);
                 editedGrade.replaceGradeId(gradeId);
-                if (studentForGrading != null)
-                    editedGrade.setConcreteStudent(studentForGrading);
+                if (studentIndexForGrading != null)
+                    editedGrade.setConcreteStudentIndex(studentIndexForGrading);
                 parentCourse.addGrade(editedGrade);
                 Model.getInstance().getCoursesContainer().commitCourseWithGradesChanges(parentCourse);
                 return Response.status(200).build();

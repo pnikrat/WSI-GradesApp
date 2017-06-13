@@ -26,24 +26,24 @@ public class Grade {
     @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "CET")
     private Date dateOfGrade;
     @Reference
-    private Student concreteStudent;
+    private Integer concreteStudentIndex;
 
     public Grade() {
 
     }
 
-    public Grade(GradeValue concreteGrade, Date dateOfGrade, Student concreteStudent) {
+    public Grade(GradeValue concreteGrade, Date dateOfGrade, Integer concreteStudent) {
         this.concreteGrade = concreteGrade;
         this.dateOfGrade = dateOfGrade;
-        this.concreteStudent = concreteStudent;
+        this.concreteStudentIndex = concreteStudent;
     }
 
     public Date getDateOfGrade() {
         return dateOfGrade;
     }
 
-    public Student getConcreteStudent() {
-        return concreteStudent;
+    public Integer getConcreteStudentIndex() {
+        return concreteStudentIndex;
     }
 
     public GradeValue getConcreteGrade() {
@@ -54,8 +54,8 @@ public class Grade {
         this.dateOfGrade = dateOfGrade;
     }
 
-    public void setConcreteStudent(Student concreteStudent) {
-        this.concreteStudent = concreteStudent;
+    public void setConcreteStudentIndex(Integer concreteStudentIndex) {
+        this.concreteStudentIndex = concreteStudentIndex;
     }
 
     public void setConcreteGrade(GradeValue value) {

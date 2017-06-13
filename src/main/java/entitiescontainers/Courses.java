@@ -2,7 +2,6 @@ package entitiescontainers;
 
 import entities.Course;
 import entities.Grade;
-import entities.GradeValue;
 import entities.Student;
 import org.bson.types.ObjectId;
 import org.mongodb.morphia.query.Query;
@@ -67,7 +66,7 @@ public class Courses {
         List<Grade> courseGrades = getCourseGrades(queriedCourse);
         if (courseGrades == null)
             return null;
-        return courseGrades.stream().filter(x -> x.getConcreteStudent().getIndex().equals(studentIndex))
+        return courseGrades.stream().filter(x -> x.getConcreteStudentIndex().equals(studentIndex))
                 .collect(Collectors.toList());
     }
 
