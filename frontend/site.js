@@ -53,7 +53,6 @@ var DataContainer = function (url, objectIdParameterName) {
     };
 
     self.updateRequest = function (row) {
-        console.log(row[objectIdParameterName]());
         $.ajax({
             url: self.url + "/" + row[objectIdParameterName](),
             dataType: "json",
@@ -71,11 +70,8 @@ var DataContainer = function (url, objectIdParameterName) {
             data: ko.mapping.toJSON(row)
         })
             .done(function (data, status, xhr) {
-                console.log(xhr.getResponseHeader("Location"));
-                console.log(xhr.status);
                 if (xhr.status === 201) {
                     $.getJSON(xhr.getResponseHeader("Location"), function (data) {
-                        console.log(data);
                         var response = ko.mapping.fromJS(data);
                         row[objectIdParameterName](response[objectIdParameterName]());
                     });
@@ -87,9 +83,6 @@ var DataContainer = function (url, objectIdParameterName) {
                         self.updateRequest(row);
                     });
             });
-//            .beforeSend(function (xhr) {
-//                
-//            })
     };
     
     self.deleteRow = function (row) {
@@ -108,9 +101,13 @@ var DataContainer = function (url, objectIdParameterName) {
 };
 
 function StudentWithDisplayName(data) {
+    function nameCheck(name) {
+        return name === null ? '<field not set!>' : name;
+    }
+    
     ko.mapping.fromJS(data, {}, this);
     this.studentDisplayName = ko.computed(function () {
-        return this.index() + ' - ' + this.firstName() + ' ' + this.lastName();
+        return this.index() + ' - ' + nameCheck(this.firstName()) + ' ' + nameCheck(this.lastName());
     }, this);
 }
 
@@ -138,20 +135,29 @@ function ViewModel() {
     self.gradesContainer = new DataContainer(serverAddress, "objectId");
     self.gradesContainer.currentCourseName = ko.observable();
     self.grades = self.gradesContainer.content;
+
     
     self.initGradesViewModel = function (coursesRow) {
-        var currentCourseId = coursesRow.objectId();
-        self.gradesContainer.currentCourseName(coursesRow.courseName());
+        var currentCourseId, currentCourseName;
+        if (coursesRow === null) {
+            currentCourseId = localStorage.getItem("currentCourseId");
+            currentCourseName = localStorage.getItem("currentCourseName");
+        } else {
+            currentCourseId = coursesRow.objectId();
+            localStorage.setItem("currentCourseId", currentCourseId);
+            currentCourseName = coursesRow.courseName();
+            localStorage.setItem("currentCourseName", currentCourseName);
+        }
+        self.gradesContainer.currentCourseName(currentCourseName);
         self.gradesContainer.url = serverAddress + "courses/" + currentCourseId + "/grades";
         self.gradesContainer.getRequest();
     };
-    
-
 }
 
 var model = new ViewModel();
-
-
+if (localStorage.getItem("currentCourseId") !== null) {
+    model.initGradesViewModel(null);
+}
 
 var studentAddButton = "#student_add_button";
 var courseAddButton = "#course_add_button";
@@ -176,7 +182,7 @@ var dummyGrade = {
 };
 
 $(studentAddButton).click(function () {
-    model.students.push(ko.mapping.fromJS(dummyStudent));
+    model.students.push(ko.mapping.fromJS(dummyStudent, studentsMapping));
 });
 
 $(courseAddButton).click(function () {
@@ -189,6 +195,5 @@ $(gradeAddButton).click(function () {
 
 
 $(document).ready(function () {
-//    ko.options.deferUpdates = true;
     ko.applyBindings(model);
 });

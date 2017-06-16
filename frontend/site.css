@@ -102,7 +102,7 @@ td {
     padding: 0 0 0 0;
 }
 
-input:invalid {
+input:invalid, select:invalid {
     background-color: #C02F1D;
     color: #fff;
 }
@@ -242,6 +242,9 @@ table tbody tr:nth-child(even) {
         content: "Date of grade";
     }
     #grades_list td:nth-of-type(3):before {
+        content: "Graded student";
+    }
+    #grades_list td:nth-of-type(4):before {
         content: "Actions";
     }
 }

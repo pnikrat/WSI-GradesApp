@@ -144,7 +144,7 @@
                                 <tr>
                                     <td><input type="number" data-bind="value: concreteGrade, attr: {max: 5.0, min: 2.0, step: 0.5}" required placeholder="Course grade"></td>
                                     <td><input type="date" data-bind="value: dateOfGrade" required></td>
-                                    <td><select data-bind="options: $root.students, optionsText: 'studentDisplayName', optionsValue: 'index', value: concreteStudentIndex, optionsCaption: 'Choose student...'"></select>
+                                    <td><select data-bind="options: $root.students, optionsText: 'studentDisplayName', optionsValue: 'index', value: concreteStudentIndex, optionsCaption: 'Choose student...'" required></select>
                                     </td>
                                     <td>
                                         <div>
@@ -171,7 +171,6 @@
             <a href="http://www.cs.put.poznan.pl/tpawlak">Teacher's website</a>
         </div>
     </footer>
-     <pre data-bind="text: JSON.stringify(ko.toJS($data), null, 2)"></pre>
     <script type="text/javascript" src="libjs/jquery-3.2.1.js"></script>
     <script type="text/javascript" src="libjs/knockout-3.4.2.js"></script>
     <script type="text/javascript" src="libjs/knockout.mapping-latest.js"></script>
