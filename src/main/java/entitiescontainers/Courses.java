@@ -50,10 +50,10 @@ public class Courses {
         return getSingleCourseById.get();
     }
 
-    public void removeStudentGrades(Student studentForGradeRemoval) {
+    public void removeStudentGrades(Integer indexOfStudentForGradeRemoval) {
         List<Course> courses = getCourses();
         for (Course singleCourse : courses) {
-            singleCourse.removeStudentGrades(studentForGradeRemoval);
+            singleCourse.removeStudentGrades(indexOfStudentForGradeRemoval);
             commitCourseWithGradesChanges(singleCourse);
         }
     }

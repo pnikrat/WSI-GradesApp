@@ -53,7 +53,7 @@ public class StudentsCollectionResource {
     public Response editStudent(@PathParam("studentindex") Integer studentIndex, Student editedStudent) {
         Student previousStudent = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
         if (previousStudent != null) {
-            Model.getInstance().getStudentsContainer().removeStudent(previousStudent);
+            Model.getInstance().getStudentsContainer().removeStudent(previousStudent.getIndex());
             editedStudent.replaceIndex(studentIndex);
             editedStudent.replaceCourseId(previousStudent.getObjectId().toHexString());
             Model.getInstance().getStudentsContainer().addStudent(editedStudent);
@@ -66,14 +66,9 @@ public class StudentsCollectionResource {
     @DELETE @Path("/{studentindex}")
     @Produces({"application/xml", "application/json"})
     public Response deleteStudent(@PathParam("studentindex") Integer studentIndex) {
-        Student studentFromParam = Model.getInstance().getStudentsContainer().findStudentByIndex(studentIndex);
-        if (studentFromParam != null) {
-            Model.getInstance().getCoursesContainer().removeStudentGrades(studentFromParam);
-            Model.getInstance().getStudentsContainer().removeStudent(studentFromParam);
+            Model.getInstance().getCoursesContainer().removeStudentGrades(studentIndex);
+            Model.getInstance().getStudentsContainer().removeStudent(studentIndex);
             URI studentsContainerURI = URI.create("students");
             return Response.status(200).location(studentsContainerURI).build();
-        }
-        else
-            return Response.status(404).build();
     }
 }

@@ -7,6 +7,7 @@ var DataContainer = function (url, objectIdParameterName) {
     var self = this;
     self.content = ko.observableArray();
     self.url = url;
+    self.otherContainerRef = {};
     
     self.getRequest = function () {
         $.ajax({
@@ -26,7 +27,7 @@ var DataContainer = function (url, objectIdParameterName) {
                         if (self.additionalMapping !== undefined) {
                             row_of_data = ko.mapping.fromJS(row_of_data, self.additionalMapping);
                         } else {
-                            row_of_data = ko.mapping.fromJS(row_of_data);
+                            row_of_data = ko.mapping.fromJS(row_of_data, {ignore: ["grades"]});
                         }
                         self.content.push(row_of_data);
                         ko.computed(function () {
@@ -94,11 +95,21 @@ var DataContainer = function (url, objectIdParameterName) {
             url: self.url + "/" + row[objectIdParameterName](),
             dataType: "json",
             method: "DELETE",
-            contentType: "application/json"
+            contentType: "application/json",
+            beforeSend: function (xhr) {
+                 //before student delete -> disable on DELETE subscriptions and empty grades VM to ensure data integrity
+                if (objectIdParameterName === 'index') {
+                    if (self.otherContainerRef.subscriptionHandler !== undefined) {
+                        self.otherContainerRef.subscriptionHandler.dispose();
+                    }
+                    self.otherContainerRef.content([]);
+                }
+            }
         });
     };
     return self;
 };
+
 
 function StudentWithDisplayName(data) {
     function nameCheck(name) {
@@ -135,7 +146,8 @@ function ViewModel() {
     self.gradesContainer = new DataContainer(serverAddress, "objectId");
     self.gradesContainer.currentCourseName = ko.observable();
     self.grades = self.gradesContainer.content;
-
+    
+    self.studentsContainer.otherContainerRef = self.gradesContainer;
     
     self.initGradesViewModel = function (coursesRow) {
         var currentCourseId, currentCourseName;
@@ -155,7 +167,7 @@ function ViewModel() {
 }
 
 var model = new ViewModel();
-if (localStorage.getItem("currentCourseId") !== null) {
+if (localStorage.getItem("currentCourseId") !== null && window.location.hash === '#grades_list') {
     model.initGradesViewModel(null);
 }
 

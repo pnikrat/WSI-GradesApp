@@ -85,8 +85,8 @@ public class Students {
         morphiaService.getDatastore().save(studentToAdd);
     }
 
-    public void removeStudent(Student studentToRemove) {
-        Query<Student> getStudentToDelete = getQueryFindStudentByIndex(studentToRemove.getIndex());
+    public void removeStudent(Integer indexOfStudentToRemove) {
+        Query<Student> getStudentToDelete = getQueryFindStudentByIndex(indexOfStudentToRemove);
         morphiaService.getDatastore().delete(getStudentToDelete);
     }
 
