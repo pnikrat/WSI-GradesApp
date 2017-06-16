@@ -56,8 +56,10 @@ public class CoursesCollectionResource {
     public Response editCourse(@PathParam("courseid") String courseId, Course editedCourse) {
         Course previousCourse = Model.getInstance().getCoursesContainer().findCourseById(courseId);
         if (previousCourse != null) {
+            List<Grade> previousCourseGrades = previousCourse.getCourseGrades();
             Model.getInstance().getCoursesContainer().removeCourse(previousCourse);
             editedCourse.replaceCourseId(courseId);
+            editedCourse.setCourseGrades(previousCourseGrades);
             Model.getInstance().getCoursesContainer().addCourse(editedCourse);
             return Response.status(200).build();
         }
